@@ -1,0 +1,541 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  .lv-root { font-family: 'DM Sans', sans-serif; color: var(--color-text-primary); padding: 0 0 2rem; }
+  .lv-hero { background: linear-gradient(135deg, #1a0a2e 0%, #2d1057 60%, #4a1a7a 100%); border-radius: var(--border-radius-lg); padding: 2rem 2rem 1.5rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+  .lv-hero::before { content: ''; position: absolute; top: -40px; right: -40px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,0.04); }
+  .lv-hero::after { content: ''; position: absolute; bottom: -20px; left: 40%; width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.03); }
+  .lv-logo-area { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+  .lv-dot { width: 8px; height: 8px; border-radius: 50%; background: #c084fc; }
+  .lv-brand { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #fff; letter-spacing: 0.08em; }
+  .lv-period { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; margin-left: auto; }
+  .lv-hero-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .lv-hero-stat { }
+  .lv-hero-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .lv-hero-val { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: #fff; line-height: 1; }
+  .lv-hero-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; }
+  .lv-hero-divider { width: 1px; background: rgba(255,255,255,0.12); margin: 0; }
+  .lv-section-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 1rem; letter-spacing: 0.02em; }
+  .lv-section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-secondary); margin: 0 0 0.5rem; }
+  .lv-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .lv-kpi { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.9rem 1rem; }
+  .lv-kpi-label { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .lv-kpi-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .lv-kpi-badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 20px; margin-top: 5px; }
+  .badge-green { background: #e8f5e0; color: #3B6D11; }
+  .badge-amber { background: #FAEEDA; color: #854F0B; }
+  .badge-red { background: #FCEBEB; color: #A32D2D; }
+  .lv-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .lv-campaign-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .lv-camp-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-bottom: 8px; font-weight: 500; }
+  .tag-smart { background: #EEEDFE; color: #3C3489; }
+  .tag-search { background: #E6F1FB; color: #0C447C; }
+  .tag-bonsucesso { background: #FAEEDA; color: #633806; }
+  .lv-camp-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; line-height: 1.4; }
+  .lv-camp-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .lv-camp-stat-item { }
+  .lv-csi-label { font-size: 10px; color: var(--color-text-secondary); }
+  .lv-csi-val { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .lv-cpl-highlight { font-size: 20px; font-weight: 500; }
+  .cpl-good { color: #3B6D11; }
+  .cpl-mid { color: #854F0B; }
+  .cpl-bad { color: #A32D2D; }
+  .lv-bar-wrap { margin: 4px 0 0; }
+  .lv-bar-bg { background: var(--color-background-secondary); border-radius: 20px; height: 5px; width: 100%; }
+  .lv-bar-fill { height: 5px; border-radius: 20px; }
+  .lv-chart-section { margin-bottom: 1.5rem; }
+  .lv-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lv-chart-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .lv-chart-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .lv-chart-sub { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 1rem; }
+  .lv-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 8px; font-size: 11px; color: var(--color-text-secondary); }
+  .lv-legend span { display: flex; align-items: center; gap: 4px; }
+  .lv-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .lv-divider { height: 0.5px; background: var(--color-border-tertiary); margin: 1.5rem 0; }
+  .lv-rec-section { margin-bottom: 1.5rem; }
+  .lv-rec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lv-rec-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .lv-rec-priority { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; padding: 2px 8px; border-radius: 20px; margin-bottom: 8px; font-weight: 500; }
+  .pri-alta { background: #FCEBEB; color: #A32D2D; }
+  .pri-media { background: #FAEEDA; color: #854F0B; }
+  .pri-estrategica { background: #EEEDFE; color: #3C3489; }
+  .lv-rec-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+  .lv-rec-items { list-style: none; margin: 0; padding: 0; }
+  .lv-rec-items li { font-size: 12px; color: var(--color-text-secondary); padding: 4px 0; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: flex-start; gap: 6px; }
+  .lv-rec-items li:last-child { border-bottom: none; }
+  .lv-bullet { width: 4px; height: 4px; border-radius: 50%; background: #7F77DD; margin-top: 6px; flex-shrink: 0; }
+  .lv-risk-card { background: #FCEBEB; border: 0.5px solid #F7C1C1; border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 12px; align-items: flex-start; }
+  .lv-risk-icon { font-size: 20px; color: #A32D2D; flex-shrink: 0; margin-top: 2px; }
+  .lv-risk-title { font-size: 14px; font-weight: 500; color: #791F1F; margin-bottom: 4px; }
+  .lv-risk-text { font-size: 12px; color: #A32D2D; line-height: 1.6; }
+  .lv-funnel-section { margin-bottom: 1.5rem; }
+  .lv-funnel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .lv-funnel-card { border-radius: var(--border-radius-md); padding: 1rem; }
+  .fc-top { background: #EEEDFE; border: 0.5px solid #AFA9EC; }
+  .fc-mid { background: #E6F1FB; border: 0.5px solid #85B7EB; }
+  .fc-bot { background: #EAF3DE; border: 0.5px solid #97C459; }
+  .lv-funnel-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .fl-top { color: #3C3489; }
+  .fl-mid { color: #0C447C; }
+  .fl-bot { color: #27500A; }
+  .lv-funnel-items { list-style: none; margin: 0; padding: 0; }
+  .lv-funnel-items li { font-size: 12px; padding: 3px 0; display: flex; align-items: center; gap: 5px; }
+  .fi-top { color: #534AB7; }
+  .fi-mid { color: #185FA5; }
+  .fi-bot { color: #3B6D11; }
+  .lv-tech-card { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+  .lv-tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.75rem; }
+  .lv-tech-item { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+  .lv-tech-q { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+  .lv-tech-a { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+  .lv-footer { text-align: center; font-size: 11px; color: var(--color-text-secondary); margin-top: 2rem; padding-top: 1rem; border-top: 0.5px solid var(--color-border-tertiary); }
+</style>
+
+<div class="lv-root">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Relatório de performance Google Ads — La Vie Danse, maio 2026</h2>
+
+  <!-- Hero Header -->
+  <div class="lv-hero">
+    <div class="lv-logo-area">
+      <div class="lv-dot"></div>
+      <div class="lv-dot" style="background:#e879f9;"></div>
+      <div class="lv-dot" style="background:#818cf8;"></div>
+      <span class="lv-brand">La Vie Danse</span>
+      <span class="lv-period">Google Ads · 01–21 Mai 2026</span>
+    </div>
+    <div class="lv-hero-grid">
+      <div class="lv-hero-stat">
+        <div class="lv-hero-label">Investimento total</div>
+        <div class="lv-hero-val">R$341</div>
+        <div class="lv-hero-sub">,76 no período</div>
+      </div>
+      <div class="lv-hero-stat" style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1rem;">
+        <div class="lv-hero-label">Conversões totais</div>
+        <div class="lv-hero-val">37</div>
+        <div class="lv-hero-sub">leads gerados</div>
+      </div>
+      <div class="lv-hero-stat" style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 1rem;">
+        <div class="lv-hero-label">CPL médio</div>
+        <div class="lv-hero-val">R$9<span style="font-size:18px">,24</span></div>
+        <div class="lv-hero-sub">custo por lead</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="lv-kpi-row">
+    <div class="lv-kpi">
+      <div class="lv-kpi-label">Cliques totais</div>
+      <div class="lv-kpi-val">511</div>
+      <div class="lv-kpi-badge badge-green">CPC R$0,67</div>
+    </div>
+    <div class="lv-kpi">
+      <div class="lv-kpi-label">Taxa de conversão</div>
+      <div class="lv-kpi-val">7,24%</div>
+      <div class="lv-kpi-badge badge-green">acima da média</div>
+    </div>
+    <div class="lv-kpi">
+      <div class="lv-kpi-label">Unidades ativas</div>
+      <div class="lv-kpi-val">2</div>
+      <div class="lv-kpi-badge badge-amber">Freguesia · Bonsucesso</div>
+    </div>
+    <div class="lv-kpi">
+      <div class="lv-kpi-label">Campanhas ativas</div>
+      <div class="lv-kpi-val">3</div>
+      <div class="lv-kpi-badge badge-amber">1 Smart · 2 Pesquisa</div>
+    </div>
+  </div>
+
+  <!-- Campaign Cards -->
+  <div class="lv-section-label">Desempenho por campanha</div>
+  <div class="lv-cards-row" style="margin-bottom: 1.5rem;">
+
+    <div class="lv-campaign-card" style="border-top: 2px solid #534AB7;">
+      <div class="lv-camp-tag tag-smart">Smart · Freguesia</div>
+      <div class="lv-camp-name">Visita à Loja · Aulas de Ballet</div>
+      <div class="lv-camp-stats">
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conversões</div>
+          <div class="lv-csi-val">32</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">CPL</div>
+          <div class="lv-cpl-highlight cpl-good">R$8,36</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Investimento</div>
+          <div class="lv-csi-val">R$267,55</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conv. rate</div>
+          <div class="lv-csi-val">9,41%</div>
+        </div>
+      </div>
+      <div class="lv-bar-wrap">
+        <div class="lv-bar-bg"><div class="lv-bar-fill" style="width:86%;background:#534AB7;"></div></div>
+      </div>
+      <div style="font-size:10px;color:#534AB7;margin-top:4px;">86% das conversões totais</div>
+    </div>
+
+    <div class="lv-campaign-card" style="border-top: 2px solid #185FA5;">
+      <div class="lv-camp-tag tag-search">Pesquisa · Freguesia</div>
+      <div class="lv-camp-name">Matrículas Abertas 2026</div>
+      <div class="lv-camp-stats">
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conversões</div>
+          <div class="lv-csi-val">3</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">CPL</div>
+          <div class="lv-cpl-highlight cpl-mid">R$14,55</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Investimento</div>
+          <div class="lv-csi-val">R$43,65</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conv. rate</div>
+          <div class="lv-csi-val">3,70%</div>
+        </div>
+      </div>
+      <div class="lv-bar-wrap">
+        <div class="lv-bar-bg"><div class="lv-bar-fill" style="width:8%;background:#185FA5;"></div></div>
+      </div>
+      <div style="font-size:10px;color:#185FA5;margin-top:4px;">8% das conversões totais</div>
+    </div>
+
+    <div class="lv-campaign-card" style="border-top: 2px solid #BA7517;">
+      <div class="lv-camp-tag tag-bonsucesso">Pesquisa · Bonsucesso</div>
+      <div class="lv-camp-name">Matrículas Abertas 2026</div>
+      <div class="lv-camp-stats">
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conversões</div>
+          <div class="lv-csi-val">2</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">CPL</div>
+          <div class="lv-cpl-highlight cpl-bad">R$15,28</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Investimento</div>
+          <div class="lv-csi-val">R$30,56</div>
+        </div>
+        <div class="lv-camp-stat-item">
+          <div class="lv-csi-label">Conv. rate</div>
+          <div class="lv-csi-val">2,22%</div>
+        </div>
+      </div>
+      <div class="lv-bar-wrap">
+        <div class="lv-bar-bg"><div class="lv-bar-fill" style="width:5%;background:#BA7517;"></div></div>
+      </div>
+      <div style="font-size:10px;color:#BA7517;margin-top:4px;">5% das conversões totais</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="lv-chart-grid" style="margin-bottom: 1.5rem;">
+    <div class="lv-chart-card">
+      <div class="lv-chart-title">Distribuição de conversões</div>
+      <div class="lv-chart-sub">por campanha · mai 2026</div>
+      <div class="lv-legend">
+        <span><span class="lv-legend-dot" style="background:#534AB7;"></span>Smart Freguesia</span>
+        <span><span class="lv-legend-dot" style="background:#185FA5;"></span>Pesq. Freguesia</span>
+        <span><span class="lv-legend-dot" style="background:#BA7517;"></span>Pesq. Bonsucesso</span>
+      </div>
+      <div style="position:relative;width:100%;height:180px;">
+        <canvas id="chartDonut" role="img" aria-label="Gráfico de rosca: Smart Freguesia 86%, Pesquisa Freguesia 8%, Pesquisa Bonsucesso 5%">Smart Freguesia 32 conversões, Pesquisa Freguesia 3, Pesquisa Bonsucesso 2.</canvas>
+      </div>
+    </div>
+    <div class="lv-chart-card">
+      <div class="lv-chart-title">CPL por campanha</div>
+      <div class="lv-chart-sub">quanto custa cada lead · R$</div>
+      <div class="lv-legend">
+        <span><span class="lv-legend-dot" style="background:#534AB7;"></span>Smart</span>
+        <span><span class="lv-legend-dot" style="background:#185FA5;border: 2px dashed #185FA5;background:none;"></span>Pesquisa</span>
+      </div>
+      <div style="position:relative;width:100%;height:180px;">
+        <canvas id="chartCPL" role="img" aria-label="Gráfico de barras: CPL Smart R$8,36, Pesquisa Freguesia R$14,55, Bonsucesso R$15,28">CPL: Smart Freguesia R$8,36, Pesquisa Freguesia R$14,55, Pesquisa Bonsucesso R$15,28.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-chart-card" style="margin-bottom: 1.5rem;">
+    <div class="lv-chart-title">Comparativo geral por campanha</div>
+    <div class="lv-chart-sub">cliques · conversões · investimento</div>
+    <div class="lv-legend">
+      <span><span class="lv-legend-dot" style="background:#534AB7;"></span>Cliques</span>
+      <span><span class="lv-legend-dot" style="background:#9F7AEA;background:none;border: 2px dashed #9F7AEA;"></span>Conversões ×10</span>
+      <span><span class="lv-legend-dot" style="background:#BA7517;"></span>Investimento ÷10</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px;">
+      <canvas id="chartComparativo" role="img" aria-label="Gráfico de barras comparativo por campanha">Comparativo de cliques, conversões e investimento entre as três campanhas.</canvas>
+    </div>
+  </div>
+
+  <!-- Alerta de risco -->
+  <div class="lv-risk-card">
+    <i class="ti ti-alert-triangle lv-risk-icon" aria-hidden="true"></i>
+    <div>
+      <div class="lv-risk-title">Atenção: dependência crítica de uma única campanha</div>
+      <div class="lv-risk-text">86% das conversões vêm de uma só campanha Smart. Qualquer instabilidade — aumento de CPC, mudança de algoritmo ou saturação de público — pode comprometer toda a geração de leads. Diversificação é urgente.</div>
+    </div>
+  </div>
+
+  <div class="lv-divider"></div>
+
+  <!-- Recomendações -->
+  <div class="lv-section-label">Otimizações e testes recomendados</div>
+  <div class="lv-rec-grid" style="margin-bottom: 1.5rem;">
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-alta"><i class="ti ti-flame" style="font-size:12px" aria-hidden="true"></i> Prioridade alta</div>
+      <div class="lv-rec-title">Escalar campanha Smart com segurança</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Aumentar orçamento 15–20% por vez, nunca abruptamente</li>
+        <li><span class="lv-bullet"></span>Monitorar CPL diariamente após cada ajuste</li>
+        <li><span class="lv-bullet"></span>Testar novas headlines e criativos mensalmente</li>
+        <li><span class="lv-bullet"></span>Adicionar extensões: preço, chamada, local</li>
+        <li><span class="lv-bullet"></span>Incluir segmentações por interesse em ballet infantil, yoga e pilates</li>
+      </ul>
+    </div>
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-alta"><i class="ti ti-flame" style="font-size:12px" aria-hidden="true"></i> Prioridade alta</div>
+      <div class="lv-rec-title">Otimização técnica das campanhas de pesquisa</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Revisar relatório de termos de pesquisa e adicionar negativas</li>
+        <li><span class="lv-bullet"></span>Ajustar correspondência das palavras-chave (excluir broad amplo)</li>
+        <li><span class="lv-bullet"></span>Melhorar copy: "Ballet infantil com matrícula aberta", "1ª aula grátis"</li>
+        <li><span class="lv-bullet"></span>Verificar índice de qualidade por keyword</li>
+        <li><span class="lv-bullet"></span>Testar anúncios responsivos com variações de CTA</li>
+      </ul>
+    </div>
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-media"><i class="ti ti-bulb" style="font-size:12px" aria-hidden="true"></i> Prioridade média</div>
+      <div class="lv-rec-title">Segmentar campanhas por modalidade</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Campanha separada: ballet infantil (Freguesia e Bonsucesso)</li>
+        <li><span class="lv-bullet"></span>Campanha separada: jazz, sapateado infantil</li>
+        <li><span class="lv-bullet"></span>Campanha separada: adultos — yoga, pilates, dance mix</li>
+        <li><span class="lv-bullet"></span>Usar foco geográfico por bairro nas campanhas de pesquisa</li>
+      </ul>
+    </div>
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-media"><i class="ti ti-bulb" style="font-size:12px" aria-hidden="true"></i> Prioridade média</div>
+      <div class="lv-rec-title">Criar estrutura de remarketing</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Audiência: visitantes do site sem conversão</li>
+        <li><span class="lv-bullet"></span>Audiência: engajamento Instagram e visualização de vídeos</li>
+        <li><span class="lv-bullet"></span>Audiência: pessoas que iniciaram contato via WhatsApp</li>
+        <li><span class="lv-bullet"></span>Mensagem personalizada para cada audiência</li>
+      </ul>
+    </div>
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-estrategica"><i class="ti ti-telescope" style="font-size:12px" aria-hidden="true"></i> Estratégico</div>
+      <div class="lv-rec-title">Integração Meta Ads + Google</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Meta gera desejo e reconhecimento de marca</li>
+        <li><span class="lv-bullet"></span>Google captura intenção e converte buscas ativas</li>
+        <li><span class="lv-bullet"></span>Remarketing fecha o ciclo com quem já interagiu</li>
+        <li><span class="lv-bullet"></span>Unificar UTMs para análise de atribuição cruzada</li>
+      </ul>
+    </div>
+    <div class="lv-rec-card">
+      <div class="lv-rec-priority pri-estrategica"><i class="ti ti-telescope" style="font-size:12px" aria-hidden="true"></i> Estratégico</div>
+      <div class="lv-rec-title">Estruturar funil completo de aquisição</div>
+      <ul class="lv-rec-items">
+        <li><span class="lv-bullet"></span>Topo: vídeos de aulas, reconhecimento local por bairro</li>
+        <li><span class="lv-bullet"></span>Meio: remarketing, engajamento de posts, depoimentos</li>
+        <li><span class="lv-bullet"></span>Fundo: aula experimental gratuita, matrícula, WhatsApp direto</li>
+        <li><span class="lv-bullet"></span>Integrar CRM ou planilha para qualificar leads recebidos</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lv-divider"></div>
+
+  <!-- Funil sugerido -->
+  <div class="lv-section-label">Estrutura de funil sugerida para junho</div>
+  <div class="lv-funnel-grid" style="margin-bottom: 1.5rem;">
+    <div class="lv-funnel-card fc-top">
+      <div class="lv-funnel-label fl-top">Topo de funil</div>
+      <ul class="lv-funnel-items">
+        <li class="fi-top"><i class="ti ti-video" style="font-size:13px" aria-hidden="true"></i> Vídeos de aulas no YouTube</li>
+        <li class="fi-top"><i class="ti ti-map-pin" style="font-size:13px" aria-hidden="true"></i> Reconhecimento local por bairro</li>
+        <li class="fi-top"><i class="ti ti-heart" style="font-size:13px" aria-hidden="true"></i> Conteúdo emocional e autoridade</li>
+        <li class="fi-top"><i class="ti ti-users" style="font-size:13px" aria-hidden="true"></i> Audiências por interesse (dança, ballet)</li>
+      </ul>
+    </div>
+    <div class="lv-funnel-card fc-mid">
+      <div class="lv-funnel-label fl-mid">Meio de funil</div>
+      <ul class="lv-funnel-items">
+        <li class="fi-mid"><i class="ti ti-repeat" style="font-size:13px" aria-hidden="true"></i> Remarketing de visitantes do site</li>
+        <li class="fi-mid"><i class="ti ti-brand-instagram" style="font-size:13px" aria-hidden="true"></i> Engajamento Instagram</li>
+        <li class="fi-mid"><i class="ti ti-star" style="font-size:13px" aria-hidden="true"></i> Depoimentos e provas sociais</li>
+        <li class="fi-mid"><i class="ti ti-player-play" style="font-size:13px" aria-hidden="true"></i> Remarketing de visualização de vídeo</li>
+      </ul>
+    </div>
+    <div class="lv-funnel-card fc-bot">
+      <div class="lv-funnel-label fl-bot">Fundo de funil</div>
+      <ul class="lv-funnel-items">
+        <li class="fi-bot"><i class="ti ti-school" style="font-size:13px" aria-hidden="true"></i> Aula experimental gratuita</li>
+        <li class="fi-bot"><i class="ti ti-brand-whatsapp" style="font-size:13px" aria-hidden="true"></i> CTA direto para WhatsApp</li>
+        <li class="fi-bot"><i class="ti ti-clipboard-check" style="font-size:13px" aria-hidden="true"></i> Campanha de matrícula com urgência</li>
+        <li class="fi-bot"><i class="ti ti-id" style="font-size:13px" aria-hidden="true"></i> Smart · manter e escalar</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="lv-divider"></div>
+
+  <!-- Revisão técnica -->
+  <div class="lv-section-label">Revisão técnica — rastreamento e conversões</div>
+  <div class="lv-tech-card">
+    <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:4px;">Questões críticas a verificar antes de qualquer decisão de escala ou pausa</div>
+    <div class="lv-tech-grid">
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-search" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>O que está sendo contado como conversão?</div>
+        <div class="lv-tech-a">Verificar se a tag de conversão dispara apenas em ações reais (clique no WhatsApp, preenchimento de formulário, ligação) e não em pageviews ou eventos duplicados.</div>
+      </div>
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-repeat" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Há conversões duplicadas?</div>
+        <div class="lv-tech-a">Confirmar configuração "uma por clique" vs "todas". Uma única visita pode disparar a mesma tag múltiplas vezes se o GA4 ou GTM não estiverem configurados corretamente.</div>
+      </div>
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-brand-whatsapp" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>WhatsApp está rastreado com UTM?</div>
+        <div class="lv-tech-a">Links de WhatsApp devem ter UTMs específicos por campanha para atribuir leads corretamente. Sem isso, o volume real de conversões via WhatsApp fica invisível.</div>
+      </div>
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-device-mobile" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>A landing page converte bem no mobile?</div>
+        <div class="lv-tech-a">Com CPLs baixos como R$8–9, qualquer atrito mobile (carregamento lento, CTA fora da dobra, formulário extenso) compromete volume. Auditar com PageSpeed Insights.</div>
+      </div>
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-funnel" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Os 37 leads viraram contatos reais?</div>
+        <div class="lv-tech-a">Cruzar dados do Google Ads com atendimentos recebidos no WhatsApp ou CRM. Se houver divergência grande, o problema é no rastreamento, não na campanha.</div>
+      </div>
+      <div class="lv-tech-item">
+        <div class="lv-tech-q"><i class="ti ti-chart-line" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>O GA4 está integrado ao Google Ads?</div>
+        <div class="lv-tech-a">A importação de metas do GA4 para o Google Ads permite usar dados de qualidade de sessão na otimização das campanhas Smart. Sem isso, o algoritmo otimiza no escuro.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lv-footer">
+    Análise de performance · La Vie Danse · Unidades Freguesia & Bonsucesso · Maio 2026
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function() {
+  var isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  var textColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)';
+  var gridColor = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+
+  new Chart(document.getElementById('chartDonut'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Smart · Freguesia', 'Pesquisa · Freguesia', 'Pesquisa · Bonsucesso'],
+      datasets: [{
+        data: [32, 3, 2],
+        backgroundColor: ['#534AB7', '#185FA5', '#BA7517'],
+        borderWidth: 2,
+        borderColor: isDark ? '#1a1a1a' : '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '65%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var pct = Math.round(ctx.parsed / 37 * 100);
+              return ' ' + ctx.parsed + ' conversões (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartCPL'), {
+    type: 'bar',
+    data: {
+      labels: ['Smart · Freq.', 'Pesquisa · Freq.', 'Pesquisa · Bon.'],
+      datasets: [{
+        label: 'CPL (R$)',
+        data: [8.36, 14.55, 15.28],
+        backgroundColor: ['#534AB7', '#185FA5', '#BA7517'],
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 20,
+          ticks: {
+            color: textColor, fontSize: 11,
+            callback: function(v) { return 'R$' + v.toFixed(0); }
+          },
+          grid: { color: gridColor }
+        },
+        x: {
+          ticks: { color: textColor, font: { size: 10 } },
+          grid: { display: false },
+          ticks: { autoSkip: false, maxRotation: 0, color: textColor, font: { size: 10 } }
+        }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chartComparativo'), {
+    type: 'bar',
+    data: {
+      labels: ['Smart · Freguesia', 'Pesquisa · Freguesia', 'Pesquisa · Bonsucesso'],
+      datasets: [
+        {
+          label: 'Cliques',
+          data: [340, 81, 90],
+          backgroundColor: '#534AB7',
+          borderRadius: 3
+        },
+        {
+          label: 'Conversões ×10',
+          data: [320, 30, 20],
+          backgroundColor: 'rgba(83,74,183,0.3)',
+          borderRadius: 3,
+          borderDash: [4,2]
+        },
+        {
+          label: 'Investimento ÷10',
+          data: [26.8, 4.4, 3.1],
+          backgroundColor: '#BA7517',
+          borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: textColor, font: { size: 10 } },
+          grid: { color: gridColor }
+        },
+        x: {
+          ticks: { autoSkip: false, maxRotation: 0, color: textColor, font: { size: 10 } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+})();
+</script>
