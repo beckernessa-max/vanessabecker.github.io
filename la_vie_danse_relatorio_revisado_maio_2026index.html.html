@@ -1,0 +1,546 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.r{font-family:'DM Sans',sans-serif;color:var(--color-text-primary);padding:0 0 2rem;}
+.hero{background:#150a2a;border-radius:var(--border-radius-lg);padding:1.75rem 2rem 1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.ha{position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(192,132,252,0.06);}
+.ha2{position:absolute;bottom:-30px;left:30%;width:140px;height:140px;border-radius:50%;background:rgba(99,102,241,0.05);}
+.logo-row{display:flex;align-items:center;gap:8px;margin-bottom:1.5rem;}
+.dot{width:7px;height:7px;border-radius:50%;}
+.brand{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:#fff;letter-spacing:.08em;}
+.period{font-size:11px;color:rgba(255,255,255,.4);letter-spacing:.06em;margin-left:auto;}
+.hkpis{display:grid;grid-template-columns:repeat(5,1fr);gap:0;}
+.hk{padding:.75rem 1rem;border-right:.5px solid rgba(255,255,255,.08);}
+.hk:last-child{border-right:none;}
+.hk-l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.hk-v{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:#fff;line-height:1;}
+.hk-s{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px;}
+.tabs{display:flex;gap:4px;margin-bottom:1.25rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:4px;}
+.tab{flex:1;padding:7px 0;font-size:13px;font-weight:500;text-align:center;border-radius:6px;cursor:pointer;border:none;background:transparent;color:var(--color-text-secondary);transition:all .15s;}
+.tab.active{background:var(--color-background-primary);color:var(--color-text-primary);border:.5px solid var(--color-border-tertiary);}
+.panel{display:none;}
+.panel.active{display:block;}
+.sl{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--color-text-secondary);margin:0 0 .65rem;}
+.krow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem;}
+.kc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem;}
+.kc-l{font-size:11px;color:var(--color-text-secondary);margin-bottom:5px;}
+.kc-v{font-size:21px;font-weight:500;color:var(--color-text-primary);}
+.kc-b{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;margin-top:4px;}
+.bg{background:#e8f5e0;color:#3B6D11;}
+.ba{background:#FAEEDA;color:#854F0B;}
+.br{background:#FCEBEB;color:#A32D2D;}
+.bp{background:#EEEDFE;color:#3C3489;}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;}
+.cards2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.25rem;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;}
+.ctag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;margin-bottom:7px;font-weight:500;}
+.t-smart{background:#EEEDFE;color:#3C3489;}
+.t-srch{background:#E6F1FB;color:#0C447C;}
+.t-bon{background:#FAEEDA;color:#633806;}
+.t-depo{background:#FBEAF0;color:#72243E;}
+.t-enc{background:#F1EFE8;color:#5F5E5A;}
+.cname{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;line-height:1.4;}
+.cstats{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.cs-l{font-size:10px;color:var(--color-text-secondary);}
+.cs-v{font-size:15px;font-weight:500;color:var(--color-text-primary);}
+.cpl-g{color:#3B6D11;font-size:19px;font-weight:500;}
+.cpl-a{color:#854F0B;font-size:19px;font-weight:500;}
+.cpl-r{color:#A32D2D;font-size:19px;font-weight:500;}
+.cpl-gr{color:#888780;font-size:19px;font-weight:500;}
+.bar-bg{background:var(--color-background-secondary);border-radius:20px;height:4px;width:100%;margin-top:8px;}
+.bar-f{height:4px;border-radius:20px;}
+.chart-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;margin-bottom:1.25rem;}
+.ct{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px;}
+.cs2{font-size:11px;color:var(--color-text-secondary);margin-bottom:.85rem;}
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:11px;color:var(--color-text-secondary);}
+.leg span{display:flex;align-items:center;gap:4px;}
+.ld{width:8px;height:8px;border-radius:2px;}
+.div{height:.5px;background:var(--color-border-tertiary);margin:1.25rem 0;}
+.risk{background:#FCEBEB;border:.5px solid #F7C1C1;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem;margin-bottom:1.25rem;display:flex;gap:10px;align-items:flex-start;}
+.risk-t{font-size:13px;font-weight:500;color:#791F1F;margin-bottom:3px;}
+.risk-tx{font-size:12px;color:#A32D2D;line-height:1.6;}
+.insight{background:#E1F5EE;border:.5px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem;margin-bottom:1.25rem;display:flex;gap:10px;align-items:flex-start;}
+.insight-t{font-size:13px;font-weight:500;color:#085041;margin-bottom:3px;}
+.insight-tx{font-size:12px;color:#0F6E56;line-height:1.6;}
+.urgente{background:#FAEEDA;border:.5px solid #FAC775;border-radius:var(--border-radius-lg);padding:.9rem 1.1rem;margin-bottom:1.25rem;display:flex;gap:10px;align-items:flex-start;}
+.urgente-t{font-size:13px;font-weight:500;color:#633806;margin-bottom:3px;}
+.urgente-tx{font-size:12px;color:#854F0B;line-height:1.6;}
+.rec-card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem;}
+.rp{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:20px;margin-bottom:7px;font-weight:500;}
+.rt{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;}
+.rl{list-style:none;}
+.rl li{font-size:12px;color:var(--color-text-secondary);padding:3px 0;border-bottom:.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;gap:5px;line-height:1.5;}
+.rl li:last-child{border-bottom:none;}
+.bul{width:4px;height:4px;border-radius:50%;background:#7F77DD;margin-top:6px;flex-shrink:0;}
+.pipe-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:.75rem;}
+.pipe-step{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.75rem .65rem;text-align:center;}
+.pipe-num{font-size:22px;font-weight:500;margin-bottom:3px;}
+.pipe-label{font-size:11px;color:var(--color-text-secondary);line-height:1.4;}
+.pipe-rate{font-size:10px;margin-top:5px;padding:2px 6px;border-radius:20px;display:inline-block;}
+.utm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem;}
+.utm-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.85rem 1rem;}
+.utm-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:5px;}
+.utm-val{font-family:monospace;font-size:11px;color:var(--color-text-primary);word-break:break-all;line-height:1.7;}
+.funnel3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;}
+.fc-t{background:#EEEDFE;border:.5px solid #AFA9EC;border-radius:var(--border-radius-md);padding:.9rem 1rem;}
+.fc-m{background:#E6F1FB;border:.5px solid #85B7EB;border-radius:var(--border-radius-md);padding:.9rem 1rem;}
+.fc-b{background:#EAF3DE;border:.5px solid #97C459;border-radius:var(--border-radius-md);padding:.9rem 1rem;}
+.fl-top{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#3C3489;margin-bottom:7px;}
+.fl-mid{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#0C447C;margin-bottom:7px;}
+.fl-bot{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#27500A;margin-bottom:7px;}
+.fi{list-style:none;}
+.fi li{font-size:12px;padding:2px 0;display:flex;align-items:center;gap:5px;}
+.fi-t{color:#534AB7;}
+.fi-m{color:#185FA5;}
+.fi-b{color:#3B6D11;}
+.footer{text-align:center;font-size:11px;color:var(--color-text-secondary);margin-top:1.5rem;padding-top:1rem;border-top:.5px solid var(--color-border-tertiary);}
+.enc-overlay{opacity:.55;}
+.enc-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;background:#F1EFE8;color:#5F5E5A;margin-bottom:6px;font-weight:500;}
+</style>
+
+<div class="r">
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Relatório integrado revisado Google Ads e Meta Ads — La Vie Danse maio 2026</h2>
+
+<div class="hero">
+  <div class="ha"></div><div class="ha2"></div>
+  <div class="logo-row">
+    <div class="dot" style="background:#c084fc;"></div>
+    <div class="dot" style="background:#e879f9;"></div>
+    <div class="dot" style="background:#818cf8;"></div>
+    <span class="brand">La Vie Danse</span>
+    <span class="period">Relatório integrado · Google Ads + Meta Ads · Maio 2026</span>
+  </div>
+  <div class="hkpis">
+    <div class="hk"><div class="hk-l">Invest. total</div><div class="hk-v">R$877</div><div class="hk-s">,71 combinado</div></div>
+    <div class="hk" style="border-left:.5px solid rgba(255,255,255,.08);"><div class="hk-l">Google · leads</div><div class="hk-v">37</div><div class="hk-s">CPL R$9,24</div></div>
+    <div class="hk" style="border-left:.5px solid rgba(255,255,255,.08);"><div class="hk-l">Meta · conversas</div><div class="hk-v">90</div><div class="hk-s">CPL R$5,94</div></div>
+    <div class="hk" style="border-left:.5px solid rgba(255,255,255,.08);"><div class="hk-l">Lead registrado</div><div class="hk-v" style="color:#F09595;">1</div><div class="hk-s" style="color:rgba(255,100,100,.5);">funil invisível</div></div>
+    <div class="hk" style="border-left:.5px solid rgba(255,255,255,.08);"><div class="hk-l">Canais ativos</div><div class="hk-v">2</div><div class="hk-s">Google + Meta</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('google')"><i class="ti ti-search" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Google Ads</button>
+  <button class="tab" onclick="showTab('meta')"><i class="ti ti-brand-instagram" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Meta Ads</button>
+  <button class="tab" onclick="showTab('pipeline')"><i class="ti ti-git-merge" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Pipeline</button>
+  <button class="tab" onclick="showTab('estrategia')"><i class="ti ti-telescope" style="font-size:13px;margin-right:4px" aria-hidden="true"></i>Estratégia</button>
+</div>
+
+<div id="panel-google" class="panel active">
+  <div class="krow">
+    <div class="kc"><div class="kc-l">Investimento</div><div class="kc-v">R$341,76</div><div class="kc-b ba">21 dias</div></div>
+    <div class="kc"><div class="kc-l">Conversões</div><div class="kc-v">37</div><div class="kc-b bg">leads</div></div>
+    <div class="kc"><div class="kc-l">CPC médio</div><div class="kc-v">R$0,67</div><div class="kc-b bg">511 cliques</div></div>
+    <div class="kc"><div class="kc-l">Taxa de conv.</div><div class="kc-v">7,24%</div><div class="kc-b bg">acima da média</div></div>
+  </div>
+  <div class="sl">Desempenho por campanha</div>
+  <div class="cards3">
+    <div class="card" style="border-top:2px solid #534AB7;">
+      <div class="ctag t-smart">Smart · Freguesia</div>
+      <div class="cname">Visita à loja · Aulas de Ballet</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversões</div><div class="cs-v">32</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-g">R$8,36</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$267,55</div></div>
+        <div><div class="cs-l">Conv. rate</div><div class="cs-v">9,41%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:86%;background:#534AB7;"></div></div>
+      <div style="font-size:10px;color:#534AB7;margin-top:4px;">86% das conversões · escalar</div>
+    </div>
+    <div class="card" style="border-top:2px solid #185FA5;">
+      <div class="ctag t-srch">Pesquisa · Freguesia</div>
+      <div class="cname">Matrículas Abertas 2026</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversões</div><div class="cs-v">3</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-a">R$14,55</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$43,65</div></div>
+        <div><div class="cs-l">Conv. rate</div><div class="cs-v">3,70%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:8%;background:#185FA5;"></div></div>
+      <div style="font-size:10px;color:#185FA5;margin-top:4px;">8% · otimizar keywords</div>
+    </div>
+    <div class="card" style="border-top:2px solid #BA7517;">
+      <div class="ctag t-bon">Pesquisa · Bonsucesso</div>
+      <div class="cname">Matrículas Abertas 2026</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversões</div><div class="cs-v">2</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-r">R$15,28</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$30,56</div></div>
+        <div><div class="cs-l">Conv. rate</div><div class="cs-v">2,22%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:5%;background:#BA7517;"></div></div>
+      <div style="font-size:10px;color:#BA7517;margin-top:4px;">5% · reestruturar</div>
+    </div>
+  </div>
+  <div class="cards2">
+    <div class="chart-card" style="margin-bottom:0;">
+      <div class="ct">Distribuição de conversões</div>
+      <div class="cs2">por campanha</div>
+      <div class="leg">
+        <span><span class="ld" style="background:#534AB7;"></span>Smart Freq.</span>
+        <span><span class="ld" style="background:#185FA5;"></span>Pesq. Freq.</span>
+        <span><span class="ld" style="background:#BA7517;"></span>Pesq. Bon.</span>
+      </div>
+      <div style="position:relative;width:100%;height:160px;"><canvas id="cDonut" role="img" aria-label="Rosca: Smart 86%, Freq 8%, Bon 5%">Smart 32, Freq 3, Bon 2.</canvas></div>
+    </div>
+    <div class="chart-card" style="margin-bottom:0;">
+      <div class="ct">CPL por campanha (R$)</div>
+      <div class="cs2">quanto custa cada lead</div>
+      <div class="leg">
+        <span><span class="ld" style="background:#534AB7;"></span>Smart</span>
+        <span><span class="ld" style="background:#BA7517;"></span>Pesquisa</span>
+      </div>
+      <div style="position:relative;width:100%;height:160px;"><canvas id="cCPL" role="img" aria-label="Barras CPL Google">CPL Smart 8.36, Freq 14.55, Bon 15.28.</canvas></div>
+    </div>
+  </div>
+  <div class="risk">
+    <i class="ti ti-alert-triangle" style="font-size:18px;color:#A32D2D;flex-shrink:0;margin-top:2px;" aria-hidden="true"></i>
+    <div><div class="risk-t">Dependência crítica: 86% das conversões em uma única campanha</div><div class="risk-tx">Se houver mudança de algoritmo, aumento de CPC ou saturação de público, toda a geração de leads pode cair. Diversificação é urgente para junho.</div></div>
+  </div>
+</div>
+
+<div id="panel-meta" class="panel">
+  <div class="krow">
+    <div class="kc"><div class="kc-l">Investimento</div><div class="kc-v">R$534,95</div><div class="kc-b ba">período</div></div>
+    <div class="kc"><div class="kc-l">Conversas iniciadas</div><div class="kc-v">90</div><div class="kc-b bg">WhatsApp</div></div>
+    <div class="kc"><div class="kc-l">Cliques no link</div><div class="kc-v">213</div><div class="kc-b ba">CTR médio</div></div>
+    <div class="kc"><div class="kc-l">Lead registrado</div><div class="kc-v" style="color:#A32D2D;">1</div><div class="kc-b br">sem rastreamento</div></div>
+  </div>
+
+  <div class="sl">Campanhas do período</div>
+  <div class="cards2">
+    <div class="card" style="border-top:2px solid #993556;">
+      <div class="ctag t-depo">Ativa · Freguesia</div>
+      <div class="cname">[Freguesia] Vídeo Depoimento · Raio 3km</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversas</div><div class="cs-v">35</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-g">R$6,10</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$213,81</div></div>
+        <div><div class="cs-l">CTR</div><div class="cs-v">0,63%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:39%;background:#993556;"></div></div>
+      <div style="font-size:10px;color:#993556;margin-top:4px;">39% das conversas · escalar com novos depoimentos</div>
+    </div>
+
+    <div class="card enc-overlay" style="border-top:2px solid #B4B2A9;">
+      <div class="enc-tag"><i class="ti ti-circle-x" style="font-size:11px;margin-right:2px;" aria-hidden="true"></i>Encerrada · pontual Dia das Mães</div>
+      <div class="cname" style="color:var(--color-text-secondary);">[Bonsu+Freq] Vídeo Explicação Sling · Raio 3km</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversas</div><div class="cs-v">33</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-gr">R$3,93</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$129,84</div></div>
+        <div><div class="cs-l">CTR</div><div class="cs-v">1,03%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:37%;background:#B4B2A9;"></div></div>
+      <div style="font-size:10px;color:#888780;margin-top:4px;">37% das conversas · campanha encerrada</div>
+    </div>
+
+    <div class="card enc-overlay" style="border-top:2px solid #B4B2A9;">
+      <div class="enc-tag"><i class="ti ti-circle-x" style="font-size:11px;margin-right:2px;" aria-hidden="true"></i>Encerrada · Bonsucesso</div>
+      <div class="cname" style="color:var(--color-text-secondary);">[Bonsucesso] Vídeo Sling Dance · Raio 3km</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversas</div><div class="cs-v">16</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-gr">R$9,71</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$155,41</div></div>
+        <div><div class="cs-l">CTR</div><div class="cs-v">0,44%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:18%;background:#B4B2A9;"></div></div>
+      <div style="font-size:10px;color:#888780;margin-top:4px;">18% das conversas · campanha encerrada</div>
+    </div>
+
+    <div class="card enc-overlay" style="border-top:2px solid #B4B2A9;">
+      <div class="enc-tag"><i class="ti ti-circle-x" style="font-size:11px;margin-right:2px;" aria-hidden="true"></i>Encerrada · Freguesia</div>
+      <div class="cname" style="color:var(--color-text-secondary);">[Freguesia] Vídeo Sling Dance · Raio 3km</div>
+      <div class="cstats">
+        <div><div class="cs-l">Conversas</div><div class="cs-v">5</div></div>
+        <div><div class="cs-l">CPL</div><div class="cpl-gr">R$5,27</div></div>
+        <div><div class="cs-l">Investimento</div><div class="cs-v">R$26,35</div></div>
+        <div><div class="cs-l">CTR</div><div class="cs-v">0,79%</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-f" style="width:6%;background:#B4B2A9;"></div></div>
+      <div style="font-size:10px;color:#888780;margin-top:4px;">6% · encerrada</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="ct">CPL por campanha Meta Ads (R$)</div>
+    <div class="cs2">custo por conversa iniciada no WhatsApp · campanhas encerradas em cinza</div>
+    <div class="leg">
+      <span><span class="ld" style="background:#993556;"></span>Depoimento (ativa)</span>
+      <span><span class="ld" style="background:#B4B2A9;"></span>Encerradas</span>
+    </div>
+    <div style="position:relative;width:100%;height:180px;"><canvas id="cMeta" role="img" aria-label="Barras CPL Meta Ads">CPL: Depoimento 6.10, Sling ambas 3.93, Sling Bonsucesso 9.71, Sling Freguesia 5.27.</canvas></div>
+  </div>
+
+  <div class="insight">
+    <i class="ti ti-bulb" style="font-size:18px;color:#085041;flex-shrink:0;margin-top:2px;" aria-hidden="true"></i>
+    <div><div class="insight-t">Insight estratégico: Freguesia responde melhor à comunicação atual</div><div class="insight-tx">A campanha de depoimento na Freguesia gerou o maior volume de conversas (35) com CPL saudável de R$6,10. Isso confirma que Freguesia tem maior aderência à comunicação atual da marca — Bonsucesso pode precisar de uma linguagem e oferta diferentes para junho.</div></div>
+  </div>
+
+  <div class="risk">
+    <i class="ti ti-alert-triangle" style="font-size:18px;color:#A32D2D;flex-shrink:0;margin-top:2px;" aria-hidden="true"></i>
+    <div><div class="risk-t">90 conversas, 1 lead registrado — o WhatsApp está engolindo os dados</div><div class="risk-tx">O Meta reporta microconversão (conversa iniciada), não resultado de negócio. Sem rastreamento por UTM e registro dos contatos, é impossível saber qual campanha gera matrículas reais.</div></div>
+  </div>
+</div>
+
+<div id="panel-pipeline" class="panel">
+
+  <div class="urgente">
+    <i class="ti ti-bolt" style="font-size:18px;color:#854F0B;flex-shrink:0;margin-top:2px;" aria-hidden="true"></i>
+    <div>
+      <div class="urgente-t">Urgente esta semana: estruturar mensuração dos leads do Meta</div>
+      <div class="urgente-tx">Hoje 90 conversas chegaram pelo WhatsApp e apenas 1 foi registrada. Sem saber quantas viraram aula experimental ou matrícula, é impossível otimizar. A planilha abaixo pode ser implementada ainda essa semana — é simples, gratuita e resolve o problema imediatamente.</div>
+    </div>
+  </div>
+
+  <div class="sl">Pipeline do clique à matrícula</div>
+  <div style="margin-bottom:1.25rem;">
+    <div class="pipe-steps">
+      <div class="pipe-step">
+        <div class="pipe-num" style="color:#534AB7;">90</div>
+        <div class="pipe-label">Conversa<br>iniciada</div>
+        <div class="pipe-rate" style="background:#EEEDFE;color:#3C3489;">Meta · entrada</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num" style="color:#185FA5;">?</div>
+        <div class="pipe-label">Lead<br>qualificado</div>
+        <div class="pipe-rate" style="background:#E6F1FB;color:#0C447C;">a medir</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num" style="color:#0F6E56;">?</div>
+        <div class="pipe-label">Aula exp.<br>agendada</div>
+        <div class="pipe-rate" style="background:#E1F5EE;color:#085041;">a medir</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num" style="color:#BA7517;">?</div>
+        <div class="pipe-label">Compareceu<br>à aula</div>
+        <div class="pipe-rate" style="background:#FAEEDA;color:#633806;">a medir</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-num" style="color:#3B6D11;">?</div>
+        <div class="pipe-label">Matrícula<br>realizada</div>
+        <div class="pipe-rate" style="background:#EAF3DE;color:#27500A;">objetivo</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);padding:.7rem 1rem;background:var(--color-background-secondary);border-radius:var(--border-radius-md);">
+      <i class="ti ti-info-circle" style="font-size:14px;margin-right:5px;vertical-align:-2px;" aria-hidden="true"></i>
+      Hoje só o primeiro estágio é visível. Os demais precisam ser registrados — a planilha abaixo resolve isso esta semana.
+    </div>
+  </div>
+
+  <div class="sl">Planilha de controle de leads — implementar esta semana</div>
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;">Colunas sugeridas para o Google Sheets</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed;">
+        <thead>
+          <tr style="background:var(--color-background-secondary);">
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:12%;">Data</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:15%;">Nome</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:14%;">Origem</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:13%;">Unidade</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:15%;">Status</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:16%;">Aula exp.</th>
+            <th style="padding:7px 8px;text-align:left;font-weight:500;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);width:15%;">Matrícula</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);">25/05</td>
+            <td style="padding:6px 8px;color:var(--color-text-primary);border-bottom:.5px solid var(--color-border-tertiary);">Ana Silva</td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#FBEAF0;color:#72243E;font-size:10px;padding:1px 6px;border-radius:20px;">depoimento</span></td>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);">Freguesia</td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#E6F1FB;color:#0C447C;font-size:10px;padding:1px 6px;border-radius:20px;">qualificado</span></td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#E1F5EE;color:#085041;font-size:10px;padding:1px 6px;border-radius:20px;">agendada 28/05</span></td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);">—</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);">24/05</td>
+            <td style="padding:6px 8px;color:var(--color-text-primary);border-bottom:.5px solid var(--color-border-tertiary);">Carla M.</td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#EEEDFE;color:#3C3489;font-size:10px;padding:1px 6px;border-radius:20px;">google smart</span></td>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);border-bottom:.5px solid var(--color-border-tertiary);">Freguesia</td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#EAF3DE;color:#27500A;font-size:10px;padding:1px 6px;border-radius:20px;">matriculada</span></td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);">compareceu</td>
+            <td style="padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary);"><span style="background:#EAF3DE;color:#27500A;font-size:10px;padding:1px 6px;border-radius:20px;">sim</span></td>
+          </tr>
+          <tr>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);">23/05</td>
+            <td style="padding:6px 8px;color:var(--color-text-primary);">Paula R.</td>
+            <td style="padding:6px 8px;"><span style="background:#FBEAF0;color:#72243E;font-size:10px;padding:1px 6px;border-radius:20px;">depoimento</span></td>
+            <td style="padding:6px 8px;color:var(--color-text-secondary);">Bonsucesso</td>
+            <td style="padding:6px 8px;"><span style="background:#FAEEDA;color:#633806;font-size:10px;padding:1px 6px;border-radius:20px;">sem resposta</span></td>
+            <td style="padding:6px 8px;">—</td>
+            <td style="padding:6px 8px;">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-top:10px;padding-top:8px;border-top:.5px solid var(--color-border-tertiary);">
+      <i class="ti ti-info-circle" style="font-size:13px;margin-right:4px;vertical-align:-2px;" aria-hidden="true"></i>
+      Coluna "Origem" deve ser preenchida conforme o link/UTM pelo qual o contato chegou. Com isso, em 30 dias é possível saber qual campanha gera matrícula real.
+    </div>
+  </div>
+
+  <div class="sl">UTMs por campanha — separar origem de cada lead</div>
+  <div class="utm-grid">
+    <div class="utm-card">
+      <div class="utm-label"><i class="ti ti-brand-whatsapp" style="font-size:13px;margin-right:3px;" aria-hidden="true"></i>Meta · Campanha Depoimento</div>
+      <div class="utm-val">wa.me/55119XXXXX<br>?utm_source=meta<br>&utm_campaign=depoimento<br>&utm_medium=video</div>
+    </div>
+    <div class="utm-card">
+      <div class="utm-label"><i class="ti ti-search" style="font-size:13px;margin-right:3px;" aria-hidden="true"></i>Google Smart · Freguesia</div>
+      <div class="utm-val">utm_source=google<br>&utm_campaign=smart-freguesia<br>&utm_medium=cpc<br>&utm_content=ballet</div>
+    </div>
+    <div class="utm-card">
+      <div class="utm-label"><i class="ti ti-search" style="font-size:13px;margin-right:3px;" aria-hidden="true"></i>Google Pesquisa · Freguesia</div>
+      <div class="utm-val">utm_source=google<br>&utm_campaign=pesquisa-freguesia<br>&utm_medium=cpc<br>&utm_content=matriculas</div>
+    </div>
+    <div class="utm-card">
+      <div class="utm-label"><i class="ti ti-search" style="font-size:13px;margin-right:3px;" aria-hidden="true"></i>Google Pesquisa · Bonsucesso</div>
+      <div class="utm-val">utm_source=google<br>&utm_campaign=pesquisa-bonsucesso<br>&utm_medium=cpc<br>&utm_content=matriculas</div>
+    </div>
+  </div>
+
+  <div class="sl">O que medir a partir de agora</div>
+  <div class="cards2">
+    <div class="card">
+      <div style="font-size:10px;background:#FCEBEB;color:#A32D2D;padding:2px 7px;border-radius:20px;display:inline-block;margin-bottom:7px;">Parar de medir como sucesso</div>
+      <ul class="rl">
+        <li><span class="bul" style="background:#E24B4A;"></span>Conversa iniciada como métrica final</li>
+        <li><span class="bul" style="background:#E24B4A;"></span>CPL baseado só em microconversão do Meta</li>
+        <li><span class="bul" style="background:#E24B4A;"></span>Volume de cliques sem qualificação</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div style="font-size:10px;background:#EAF3DE;color:#3B6D11;padding:2px 7px;border-radius:20px;display:inline-block;margin-bottom:7px;">Começar a medir</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Custo por lead qualificado (respondeu + tem interesse real)</li>
+        <li><span class="bul"></span>Custo por aula experimental agendada</li>
+        <li><span class="bul"></span>Taxa de comparecimento na aula experimental</li>
+        <li><span class="bul"></span>CAC real — custo por matrícula fechada por canal</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="panel-estrategia" class="panel">
+  <div class="sl">Funil integrado Meta + Google</div>
+  <div class="funnel3">
+    <div class="fc-t">
+      <div class="fl-top">Topo · Meta</div>
+      <ul class="fi">
+        <li class="fi-t"><i class="ti ti-video" style="font-size:12px;" aria-hidden="true"></i> Vídeos de depoimento (Freguesia)</li>
+        <li class="fi-t"><i class="ti ti-map-pin" style="font-size:12px;" aria-hidden="true"></i> Raio 3km por unidade</li>
+        <li class="fi-t"><i class="ti ti-heart" style="font-size:12px;" aria-hidden="true"></i> Novos depoimentos: mães, adultos</li>
+        <li class="fi-t"><i class="ti ti-users" style="font-size:12px;" aria-hidden="true"></i> Testar nova linguagem em Bonsucesso</li>
+      </ul>
+    </div>
+    <div class="fc-m">
+      <div class="fl-mid">Meio · Meta + Google</div>
+      <ul class="fi">
+        <li class="fi-m"><i class="ti ti-repeat" style="font-size:12px;" aria-hidden="true"></i> Remarketing de visitantes do site</li>
+        <li class="fi-m"><i class="ti ti-brand-instagram" style="font-size:12px;" aria-hidden="true"></i> Engajamento Instagram</li>
+        <li class="fi-m"><i class="ti ti-star" style="font-size:12px;" aria-hidden="true"></i> Depoimentos de transformação</li>
+        <li class="fi-m"><i class="ti ti-player-play" style="font-size:12px;" aria-hidden="true"></i> Remarketing de visualização de vídeo</li>
+      </ul>
+    </div>
+    <div class="fc-b">
+      <div class="fl-bot">Fundo · Google + WhatsApp</div>
+      <ul class="fi">
+        <li class="fi-b"><i class="ti ti-search" style="font-size:12px;" aria-hidden="true"></i> Google captura intenção ativa</li>
+        <li class="fi-b"><i class="ti ti-school" style="font-size:12px;" aria-hidden="true"></i> Aula experimental gratuita</li>
+        <li class="fi-b"><i class="ti ti-brand-whatsapp" style="font-size:12px;" aria-hidden="true"></i> CTA WhatsApp com UTM por campanha</li>
+        <li class="fi-b"><i class="ti ti-clipboard-check" style="font-size:12px;" aria-hidden="true"></i> Planilha de leads preenchida diariamente</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sl">Otimizações recomendadas para junho</div>
+  <div class="cards2" style="margin-bottom:1.25rem;">
+    <div class="rec-card">
+      <div class="rp" style="background:#FCEBEB;color:#A32D2D;"><i class="ti ti-flame" style="font-size:11px;" aria-hidden="true"></i> Alta prioridade</div>
+      <div class="rt">Estruturar mensuração de leads do WhatsApp</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Criar planilha de controle de leads esta semana</li>
+        <li><span class="bul"></span>Implementar UTMs distintos por campanha no link de WhatsApp</li>
+        <li><span class="bul"></span>Treinar equipe de atendimento para registrar origem, status e resultado</li>
+        <li><span class="bul"></span>Revisar semanalmente: qual campanha está gerando matrícula real</li>
+      </ul>
+    </div>
+    <div class="rec-card">
+      <div class="rp" style="background:#FCEBEB;color:#A32D2D;"><i class="ti ti-flame" style="font-size:11px;" aria-hidden="true"></i> Alta prioridade</div>
+      <div class="rt">Meta: escalar campanha de depoimento · Freguesia</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Única campanha Meta ativa — aumentar orçamento gradualmente</li>
+        <li><span class="bul"></span>Criar novas versões: depoimento de mãe, depoimento de adulto</li>
+        <li><span class="bul"></span>Testar hooks mais fortes nos primeiros 3 segundos</li>
+        <li><span class="bul"></span>Testar versões mais curtas (15s) do vídeo</li>
+      </ul>
+    </div>
+    <div class="rec-card">
+      <div class="rp" style="background:#FCEBEB;color:#A32D2D;"><i class="ti ti-flame" style="font-size:11px;" aria-hidden="true"></i> Alta prioridade</div>
+      <div class="rt">Google: escalar Smart + otimizar pesquisa</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Aumentar orçamento Smart 15–20% por vez, monitorar CPL diário</li>
+        <li><span class="bul"></span>Revisar termos de pesquisa e adicionar palavras negativas</li>
+        <li><span class="bul"></span>Melhorar copy: "ballet infantil matrícula aberta", "1ª aula grátis"</li>
+        <li><span class="bul"></span>Verificar índice de qualidade por keyword</li>
+      </ul>
+    </div>
+    <div class="rec-card">
+      <div class="rp" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-bulb" style="font-size:11px;" aria-hidden="true"></i> Média prioridade</div>
+      <div class="rt">Meta: nova campanha para Bonsucesso</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Testar linguagem e oferta diferentes do que funcionou em Freguesia</li>
+        <li><span class="bul"></span>Focar em modalidades com potencial local: pilates, jazz adulto, cursos livres</li>
+        <li><span class="bul"></span>Novo criativo — não replicar o que funcionou em Freguesia sem teste</li>
+      </ul>
+    </div>
+    <div class="rec-card">
+      <div class="rp" style="background:#FAEEDA;color:#854F0B;"><i class="ti ti-bulb" style="font-size:11px;" aria-hidden="true"></i> Média prioridade</div>
+      <div class="rt">Segmentar campanhas Google por modalidade</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Campanha dedicada: ballet infantil (Freguesia e Bonsucesso separadas)</li>
+        <li><span class="bul"></span>Campanha dedicada: adultos — yoga, pilates, dance mix, hip-hop</li>
+        <li><span class="bul"></span>Campanha dedicada: jazz e sapateado infantil</li>
+      </ul>
+    </div>
+    <div class="rec-card">
+      <div class="rp" style="background:#EEEDFE;color:#3C3489;"><i class="ti ti-telescope" style="font-size:11px;" aria-hidden="true"></i> Estratégico</div>
+      <div class="rt">Implementar remarketing + revisão técnica</div>
+      <ul class="rl">
+        <li><span class="bul"></span>Remarketing: visitantes sem conversão, visualizou 50%+ do vídeo</li>
+        <li><span class="bul"></span>Verificar se tag de conversão Google dispara em ação real</li>
+        <li><span class="bul"></span>Integrar GA4 ao Google Ads para otimização por qualidade de sessão</li>
+        <li><span class="bul"></span>Auditar landing page no mobile: PageSpeed + CTA acima da dobra</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer">Análise integrada revisada · La Vie Danse · Unidades Freguesia & Bonsucesso · Maio 2026</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(n){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  var map={google:0,meta:1,pipeline:2,estrategia:3};
+  document.querySelectorAll('.tab')[map[n]].classList.add('active');
+  document.getElementById('panel-'+n).classList.add('active');
+  if(n==='google'&&!window.gDone){renderG();window.gDone=true;}
+  if(n==='meta'&&!window.mDone){renderM();window.mDone=true;}
+}
+var dk=matchMedia('(prefers-color-scheme: dark)').matches;
+var tc=dk?'rgba(255,255,255,0.5)':'rgba(0,0,0,0.45)';
+var gc=dk?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+function renderG(){
+  new Chart(document.getElementById('cDonut'),{type:'doughnut',data:{labels:['Smart Freguesia','Pesq. Freguesia','Pesq. Bonsucesso'],datasets:[{data:[32,3,2],backgroundColor:['#534AB7','#185FA5','#BA7517'],borderWidth:2,borderColor:dk?'#1a1a1a':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.parsed+' conv. ('+Math.round(c.parsed/37*100)+'%)';}}}}}}); 
+  new Chart(document.getElementById('cCPL'),{type:'bar',data:{labels:['Smart Freq.','Pesq. Freq.','Pesq. Bon.'],datasets:[{data:[8.36,14.55,15.28],backgroundColor:['#534AB7','#185FA5','#BA7517'],borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:20,ticks:{color:tc,callback:function(v){return 'R$'+v.toFixed(0);}},grid:{color:gc}},x:{ticks:{autoSkip:false,maxRotation:0,color:tc,font:{size:10}},grid:{display:false}}}}});
+}
+function renderM(){
+  new Chart(document.getElementById('cMeta'),{type:'bar',data:{labels:['Depoimento Freq.','Sling (ambas)','Sling Bonsucesso','Sling Freguesia'],datasets:[{data:[6.10,3.93,9.71,5.27],backgroundColor:['#993556','#B4B2A9','#B4B2A9','#B4B2A9'],borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:12,ticks:{color:tc,callback:function(v){return 'R$'+v.toFixed(0);}},grid:{color:gc}},x:{ticks:{autoSkip:false,maxRotation:0,color:tc,font:{size:10}},grid:{display:false}}}}});
+}
+renderG();window.gDone=true;
+</script>
