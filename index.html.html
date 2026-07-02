@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Vie Danse — Relatório de Performance · Junho 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0818;
+    --bg2: #160d24;
+    --bg3: #1e1230;
+    --surface: #231640;
+    --surface2: #2d1e52;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0ecfa;
+    --text2: rgba(240,236,250,0.6);
+    --text3: rgba(240,236,250,0.35);
+    --purple: #a78bfa;
+    --purple2: #7c3aed;
+    --purple3: #4c1d95;
+    --pink: #f0abfc;
+    --pink2: #c026d3;
+    --teal: #5eead4;
+    --teal2: #0d9488;
+    --amber: #fbbf24;
+    --amber2: #d97706;
+    --green: #86efac;
+    --green2: #16a34a;
+    --red: #fca5a5;
+    --red2: #dc2626;
+    --gray: rgba(255,255,255,0.15);
+    --gray2: rgba(255,255,255,0.06);
+    --r: 10px;
+    --r2: 16px;
+    --r3: 6px;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(160deg, #1a0a35 0%, #0e0818 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 20%;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(240,171,252,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner { position: relative; z-index: 1; }
+  .header-eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--purple); margin-bottom: 16px;
+  }
+  .header-dots { display: flex; gap: 5px; }
+  .header-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 500; line-height: 1.1;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .header-title em { font-style: italic; color: var(--purple); }
+  .header-sub { font-size: 14px; color: var(--text2); margin-bottom: 32px; }
+  .header-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .hkpi {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px 18px;
+  }
+  .hkpi-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text3); margin-bottom: 6px; }
+  .hkpi-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 500; line-height: 1; color: var(--text);
+  }
+  .hkpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  /* NAV TABS */
+  .nav-wrap {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,8,24,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+  }
+  .nav-tabs {
+    display: flex; gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    flex-shrink: 0;
+    padding: 14px 22px;
+    font-size: 13px; font-weight: 500;
+    color: var(--text3);
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--text2); }
+  .nav-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+
+  /* PANELS */
+  .panel { display: none; padding: 40px 0 60px; }
+  .panel.active { display: block; }
+
+  /* SECTION */
+  .section { margin-bottom: 40px; }
+  .section-eyebrow {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text3); margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500;
+    color: var(--text); margin-bottom: 20px;
+  }
+
+  /* KPI GRID */
+  .kgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px; margin-bottom: 24px;
+  }
+  .kcard {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r); padding: 16px 18px;
+  }
+  .kcard-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 6px; }
+  .kcard-val { font-size: 22px; font-weight: 500; color: var(--text); }
+  .kcard-badge {
+    display: inline-block; font-size: 10px;
+    padding: 2px 8px; border-radius: 20px; margin-top: 5px;
+  }
+  .badge-green { background: rgba(134,239,172,0.12); color: var(--green); }
+  .badge-amber { background: rgba(251,191,36,0.12); color: var(--amber); }
+  .badge-red { background: rgba(252,165,165,0.12); color: var(--red); }
+  .badge-purple { background: rgba(167,139,250,0.12); color: var(--purple); }
+  .badge-gray { background: rgba(255,255,255,0.07); color: var(--text2); }
+
+  /* CARDS */
+  .cards2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .cards4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 20px 22px;
+  }
+  .card-tag {
+    display: inline-block; font-size: 10px; font-weight: 500;
+    padding: 3px 9px; border-radius: 20px; margin-bottom: 10px;
+  }
+  .tag-purple { background: rgba(167,139,250,0.15); color: var(--purple); }
+  .tag-pink { background: rgba(240,171,252,0.15); color: var(--pink); }
+  .tag-teal { background: rgba(94,234,212,0.15); color: var(--teal); }
+  .tag-amber { background: rgba(251,191,36,0.12); color: var(--amber); }
+  .tag-gray { background: rgba(255,255,255,0.07); color: var(--text2); }
+  .tag-green { background: rgba(134,239,172,0.12); color: var(--green); }
+  .tag-red { background: rgba(252,165,165,0.1); color: var(--red); }
+  .card-name { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 14px; line-height: 1.4; }
+  .card-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cs-label { font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+  .cs-val { font-size: 16px; font-weight: 500; color: var(--text); }
+  .cs-val.green { color: var(--green); font-size: 20px; }
+  .cs-val.amber { color: var(--amber); font-size: 20px; }
+  .cs-val.red { color: var(--red); font-size: 20px; }
+  .cs-val.gray { color: var(--text2); font-size: 20px; }
+  .card-bar-bg { background: rgba(255,255,255,0.06); border-radius: 20px; height: 4px; margin-top: 14px; }
+  .card-bar-fill { height: 4px; border-radius: 20px; }
+  .card-note { font-size: 11px; color: var(--text3); margin-top: 6px; }
+  .card-faded { opacity: 0.5; }
+
+  /* CHART CARDS */
+  .chart-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 20px 22px; margin-bottom: 24px;
+  }
+  .chart-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .chart-sub { font-size: 11px; color: var(--text3); margin-bottom: 16px; }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; font-size: 11px; color: var(--text2); }
+  .chart-legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* ALERTS */
+  .alert {
+    border-radius: var(--r); padding: 16px 20px; margin-bottom: 20px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .alert-critical { background: rgba(252,165,165,0.07); border: 1px solid rgba(220,38,38,0.3); }
+  .alert-warning { background: rgba(251,191,36,0.07); border: 1px solid rgba(217,119,6,0.3); }
+  .alert-info { background: rgba(94,234,212,0.06); border: 1px solid rgba(13,148,136,0.3); }
+  .alert-purple { background: rgba(167,139,250,0.07); border: 1px solid rgba(124,58,237,0.3); }
+  .alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .alert-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .alert-critical .alert-title { color: var(--red); }
+  .alert-warning .alert-title { color: var(--amber); }
+  .alert-info .alert-title { color: var(--teal); }
+  .alert-purple .alert-title { color: var(--purple); }
+  .alert-body { font-size: 12px; line-height: 1.6; color: var(--text2); }
+
+  /* REC CARDS */
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .rec-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 18px 20px; }
+  .rec-priority {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 500; padding: 3px 8px;
+    border-radius: 20px; margin-bottom: 10px;
+  }
+  .pri-high { background: rgba(252,165,165,0.1); color: var(--red); }
+  .pri-med { background: rgba(251,191,36,0.1); color: var(--amber); }
+  .pri-strat { background: rgba(167,139,250,0.1); color: var(--purple); }
+  .rec-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 10px; }
+  .rec-list { list-style: none; }
+  .rec-list li {
+    font-size: 12px; color: var(--text2); padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 7px; line-height: 1.5;
+  }
+  .rec-list li:last-child { border-bottom: none; }
+  .rec-bullet { width: 4px; height: 4px; border-radius: 50%; background: var(--purple); margin-top: 7px; flex-shrink: 0; }
+
+  /* PIPELINE */
+  .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+  .pipe-step { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 10px; text-align: center; position: relative; }
+  .pipe-step:not(:last-child)::after { content: '→'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text3); z-index: 2; }
+  .pipe-num { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; margin-bottom: 4px; }
+  .pipe-label { font-size: 10px; color: var(--text2); line-height: 1.4; }
+  .pipe-badge { font-size: 9px; padding: 2px 6px; border-radius: 20px; display: inline-block; margin-top: 6px; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table th { padding: 10px 12px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); border-bottom: 1px solid var(--border); font-weight: 500; }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* FUNNEL */
+  .funnel3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .funnel-card { border-radius: var(--r); padding: 16px 18px; }
+  .fc-top { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.2); }
+  .fc-mid { background: rgba(94,234,212,0.06); border: 1px solid rgba(94,234,212,0.2); }
+  .fc-bot { background: rgba(134,239,172,0.06); border: 1px solid rgba(134,239,172,0.2); }
+  .funnel-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .fl-top { color: var(--purple); }
+  .fl-mid { color: var(--teal); }
+  .fl-bot { color: var(--green); }
+  .funnel-items { list-style: none; }
+  .funnel-items li { font-size: 12px; padding: 3px 0; display: flex; align-items: center; gap: 6px; }
+  .fi-top { color: rgba(167,139,250,0.8); }
+  .fi-mid { color: rgba(94,234,212,0.8); }
+  .fi-bot { color: rgba(134,239,172,0.8); }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* INSIGHT BOX */
+  .insight-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .insight-box { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid; border-radius: var(--r); padding: 16px 18px; }
+  .ib-purple { border-left-color: var(--purple); }
+  .ib-teal { border-left-color: var(--teal); }
+  .ib-amber { border-left-color: var(--amber); }
+  .ib-red { border-left-color: var(--red); }
+  .ib-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .ib-body { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+  /* UTM BLOCK */
+  .utm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .utm-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; }
+  .utm-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+  .utm-val { font-family: 'DM Sans', monospace; font-size: 11px; color: var(--purple); word-break: break-all; line-height: 1.7; }
+
+  /* STATUS BADGE */
+  .status-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid;
+  }
+  .sb-done { background: rgba(134,239,172,0.08); border-color: rgba(22,163,74,0.3); color: var(--green); }
+  .sb-pending { background: rgba(251,191,36,0.08); border-color: rgba(217,119,6,0.3); color: var(--amber); }
+  .sb-critical { background: rgba(252,165,165,0.08); border-color: rgba(220,38,38,0.3); color: var(--red); }
+  .sb-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center; padding: 32px 0;
+    font-size: 11px; color: var(--text3);
+    border-top: 1px solid var(--border);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .pipeline { grid-template-columns: 1fr 1fr; }
+    .pipe-step:not(:last-child)::after { display: none; }
+    .funnel3 { grid-template-columns: 1fr; }
+    .header-kpis { grid-template-columns: repeat(2, 1fr); }
+    .header-title { font-size: 28px; }
+  }
+
+  /* CHART SPECIFIC */
+  .chart-wrap canvas { display: block; }
+
+  /* STRUCTURE STATUS */
+  .struct-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .struct-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r2); padding: 20px 22px; }
+  .struct-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .struct-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .si-purple { background: rgba(167,139,250,0.15); }
+  .si-teal { background: rgba(94,234,212,0.15); }
+  .struct-card-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .struct-card-id { font-size: 10px; color: var(--text3); font-family: monospace; }
+  .struct-items { list-style: none; }
+  .struct-items li {
+    font-size: 12px; color: var(--text2);
+    padding: 5px 0; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .struct-items li:last-child { border-bottom: none; }
+  .si-check { color: var(--green); }
+  .si-warn { color: var(--amber); }
+  .si-x { color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-eyebrow">
+      <div class="header-dots">
+        <div class="header-dot" style="background:#a78bfa;"></div>
+        <div class="header-dot" style="background:#f0abfc;"></div>
+        <div class="header-dot" style="background:#5eead4;"></div>
+      </div>
+      Relatório de Performance · Mídia Paga
+    </div>
+    <h1 class="header-title">La Vie <em>Danse</em></h1>
+    <p class="header-sub">Google Ads + Meta Ads (Instagram &amp; Facebook) · Junho 2026 · Unidades Freguesia &amp; Bonsucesso</p>
+    <div class="header-kpis">
+      <div class="hkpi">
+        <div class="hkpi-label">Invest. total</div>
+        <div class="hkpi-val">R$1.350</div>
+        <div class="hkpi-sub">,81 combinado</div>
+      </div>
+      <div class="hkpi">
+        <div class="hkpi-label">Google · leads</div>
+        <div class="hkpi-val">36</div>
+        <div class="hkpi-sub">CPL R$13,55</div>
+      </div>
+      <div class="hkpi">
+        <div class="hkpi-label">Meta · conversas</div>
+        <div class="hkpi-val">100</div>
+        <div class="hkpi-sub">CPL R$8,63</div>
+      </div>
+      <div class="hkpi">
+        <div class="hkpi-label">Alcance Meta</div>
+        <div class="hkpi-val">21.634</div>
+        <div class="hkpi-sub">pessoas únicas</div>
+      </div>
+      <div class="hkpi">
+        <div class="hkpi-label">Canais ativos</div>
+        <div class="hkpi-val">2</div>
+        <div class="hkpi-sub">Google + Meta</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-wrap">
+  <div class="container">
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showTab('google')">🔍 Google Ads</button>
+      <button class="nav-tab" onclick="showTab('meta')">📱 Meta Ads</button>
+      <button class="nav-tab" onclick="showTab('pipeline')">📋 Pipeline &amp; Rastreamento</button>
+      <button class="nav-tab" onclick="showTab('estrutura')">🏗️ Estrutura</button>
+      <button class="nav-tab" onclick="showTab('estrategia')">🎯 Estratégia Jul.</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PANELS -->
+<main>
+
+<!-- GOOGLE ADS -->
+<div id="panel-google" class="panel active">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-eyebrow">Visão geral · Google Ads</div>
+      <div class="section-title">Performance de junho</div>
+      <div class="kgrid">
+        <div class="kcard">
+          <div class="kcard-label">Investimento</div>
+          <div class="kcard-val">R$487,80</div>
+          <span class="kcard-badge badge-amber">mês completo</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Impressões</div>
+          <div class="kcard-val">15.463</div>
+          <span class="kcard-badge badge-purple">alcance local</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Cliques</div>
+          <div class="kcard-val">631</div>
+          <span class="kcard-badge badge-amber">CPC R$0,77</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Conversões</div>
+          <div class="kcard-val">36</div>
+          <span class="kcard-badge badge-green">leads gerados</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">CPL médio</div>
+          <div class="kcard-val">R$13,55</div>
+          <span class="kcard-badge badge-amber">vs R$9,24 maio</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Taxa de conv.</div>
+          <div class="kcard-val">5,7%</div>
+          <span class="kcard-badge badge-amber">vs 7,24% maio</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Comparativo</div>
+      <div class="section-title">Maio vs Junho</div>
+      <div class="chart-card">
+        <div class="chart-title">Evolução das métricas principais</div>
+        <div class="chart-sub">Comparativo mês a mês · Google Ads</div>
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background:#a78bfa;"></span>Maio</span>
+          <span><span class="legend-dot" style="background:#5eead4;"></span>Junho</span>
+        </div>
+        <div class="chart-wrap" style="height:240px;">
+          <canvas id="chartMvsJ" role="img" aria-label="Comparativo maio e junho: cliques, conversões, investimento">Maio: 511 cliques, 37 conv, R$341,76. Junho: 631 cliques, 36 conv, R$487,80.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Análise</div>
+      <div class="section-title">Leituras do mês</div>
+      <div class="insight-row">
+        <div class="insight-box ib-purple">
+          <div class="ib-title">Freguesia concentrou o maior volume de conversões</div>
+          <div class="ib-body">A unidade Freguesia manteve forte aderência entre demanda local, estrutura de campanha e proposta comercial. É o ativo principal da conta Google hoje.</div>
+        </div>
+        <div class="insight-box ib-amber">
+          <div class="ib-title">CPL subiu em relação a maio</div>
+          <div class="ib-body">De R$9,24 (maio) para R$13,55 (junho). O aumento de investimento (+42%) não foi acompanhado proporcionalmente em conversões. Campanhas de Pesquisa têm oportunidade de ganho de eficiência pós-clique.</div>
+        </div>
+        <div class="insight-box ib-teal">
+          <div class="ib-title">Campanhas de Pesquisa: oportunidade na LP</div>
+          <div class="ib-body">A taxa de conversão caiu de 7,24% para 5,7%. O gargalo mais provável está na experiência pós-clique — landing page, velocidade e CTA no mobile.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Otimizações</div>
+      <div class="section-title">Recomendações Google Ads</div>
+      <div class="rec-grid">
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Otimizar campanha Smart · Freguesia</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Manter e escalar 15–20% por vez com acompanhamento diário de CPL</li>
+            <li><span class="rec-bullet"></span>Testar novas headlines com foco em ballet infantil e aula experimental</li>
+            <li><span class="rec-bullet"></span>Adicionar extensões de preço e chamada</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Revisar campanhas de Pesquisa</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Relatório de termos de pesquisa + adicionar negativas</li>
+            <li><span class="rec-bullet"></span>Verificar índice de qualidade por keyword</li>
+            <li><span class="rec-bullet"></span>Copy: "ballet infantil matrícula aberta", "1ª aula grátis"</li>
+            <li><span class="rec-bullet"></span>Auditar landing page no mobile: PageSpeed + CTA acima da dobra</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-med">💡 Média prioridade</div>
+          <div class="rec-title">Segmentar por modalidade</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Campanha dedicada: ballet infantil (Freguesia e Bonsucesso separadas)</li>
+            <li><span class="rec-bullet"></span>Campanha dedicada: adultos — yoga, pilates, dance mix, hip-hop</li>
+            <li><span class="rec-bullet"></span>Campanha dedicada: jazz e sapateado infantil</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-strat">🔭 Estratégico</div>
+          <div class="rec-title">Implementar remarketing</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Audiência: visitantes do site sem conversão (30 dias)</li>
+            <li><span class="rec-bullet"></span>Audiência: engajamento Instagram + visualizou 50%+ do vídeo</li>
+            <li><span class="rec-bullet"></span>Integrar GA4 ao Google Ads para otimização por qualidade de sessão</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- META ADS -->
+<div id="panel-meta" class="panel">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-eyebrow">Visão geral · Meta Ads</div>
+      <div class="section-title">Performance de junho</div>
+      <div class="kgrid">
+        <div class="kcard">
+          <div class="kcard-label">Investimento</div>
+          <div class="kcard-val">R$863,01</div>
+          <span class="kcard-badge badge-amber">mês completo</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Impressões</div>
+          <div class="kcard-val">43.377</div>
+          <span class="kcard-badge badge-purple">total</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Alcance único</div>
+          <div class="kcard-val">21.634</div>
+          <span class="kcard-badge badge-teal" style="background:rgba(94,234,212,0.1);color:#5eead4;">pessoas</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">Conversas iniciadas</div>
+          <div class="kcard-val">100</div>
+          <span class="kcard-badge badge-green">WhatsApp + IG</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">CPR (custo/result.)</div>
+          <div class="kcard-val">R$8,63</div>
+          <span class="kcard-badge badge-green">eficiente</span>
+        </div>
+        <div class="kcard">
+          <div class="kcard-label">CTR média</div>
+          <div class="kcard-val">0,78%</div>
+          <span class="kcard-badge badge-amber">abaixo do potencial</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Campanhas</div>
+      <div class="section-title">Desempenho por campanha</div>
+
+      <div class="cards2">
+        <!-- Copa Freguesia -->
+        <div class="card" style="border-top: 2px solid #a78bfa;">
+          <div class="card-tag tag-purple">Ativa · Freguesia</div>
+          <div class="card-name">[Freguesia] Copa · WhatsApp + Instagram</div>
+          <div class="card-stats">
+            <div><div class="cs-label">Conversas</div><div class="cs-val green">38</div></div>
+            <div><div class="cs-label">CPA</div><div class="cs-val green">R$8,95</div></div>
+            <div><div class="cs-label">Investimento</div><div class="cs-val">R$339,92</div></div>
+            <div><div class="cs-label">Cliques</div><div class="cs-val">111</div></div>
+          </div>
+          <div class="card-bar-bg"><div class="card-bar-fill" style="width:38%;background:#a78bfa;"></div></div>
+          <div class="card-note">38% das conversas · escalar +20% por ciclo</div>
+        </div>
+
+        <!-- Copa Bonsucesso -->
+        <div class="card" style="border-top: 2px solid #fbbf24;">
+          <div class="card-tag tag-amber">Ativa · Bonsucesso ⚠️ dados não referenciais</div>
+          <div class="card-name">[Bonsucesso] Copa · WhatsApp + Instagram</div>
+          <div class="card-stats">
+            <div><div class="cs-label">Conversas</div><div class="cs-val amber">42</div></div>
+            <div><div class="cs-label">CPA</div><div class="cs-val amber">R$8,03</div></div>
+            <div><div class="cs-label">Investimento</div><div class="cs-val">R$337,42</div></div>
+            <div><div class="cs-label">Cliques</div><div class="cs-val">154</div></div>
+          </div>
+          <div class="card-bar-bg"><div class="card-bar-fill" style="width:42%;background:#fbbf24;"></div></div>
+          <div class="card-note">Alteração operacional comprometeu segmentação geográfica. Reexecutar em julho com ambiente controlado.</div>
+        </div>
+
+        <!-- Depoimento Freguesia -->
+        <div class="card" style="border-top: 2px solid #f0abfc;">
+          <div class="card-tag tag-pink">Depoimento · Freguesia</div>
+          <div class="card-name">[Freguesia] Vídeo Depoimento</div>
+          <div class="card-stats">
+            <div><div class="cs-label">Conversas</div><div class="cs-val red">6</div></div>
+            <div><div class="cs-label">CPA</div><div class="cs-val red">R$15,06</div></div>
+            <div><div class="cs-label">Investimento</div><div class="cs-val">R$90,36</div></div>
+            <div><div class="cs-label">Cliques</div><div class="cs-val">—</div></div>
+          </div>
+          <div class="card-bar-bg"><div class="card-bar-fill" style="width:6%;background:#f0abfc;"></div></div>
+          <div class="card-note">CPA quase dobrou vs Bonsucesso. Criativo pouco aderente ao perfil de Freguesia.</div>
+        </div>
+
+        <!-- Depoimento Bonsucesso -->
+        <div class="card" style="border-top: 2px solid #5eead4;">
+          <div class="card-tag tag-teal">Depoimento · Bonsucesso</div>
+          <div class="card-name">[Bonsucesso] Vídeo Depoimento</div>
+          <div class="card-stats">
+            <div><div class="cs-label">Conversas</div><div class="cs-val green">14</div></div>
+            <div><div class="cs-label">CPA</div><div class="cs-val green">R$6,81</div></div>
+            <div><div class="cs-label">Investimento</div><div class="cs-val">R$95,31</div></div>
+            <div><div class="cs-label">Cliques</div><div class="cs-val">—</div></div>
+          </div>
+          <div class="card-bar-bg"><div class="card-bar-fill" style="width:14%;background:#5eead4;"></div></div>
+          <div class="card-note">Melhor CPA da conta. Criativo de depoimento tem forte aderência ao público de Bonsucesso.</div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Gráfico</div>
+      <div class="section-title">CPR por campanha</div>
+      <div class="chart-card">
+        <div class="chart-title">Custo por resultado (R$)</div>
+        <div class="chart-sub">Quanto custou cada conversa iniciada por campanha</div>
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background:#a78bfa;"></span>Freguesia Copa</span>
+          <span><span class="legend-dot" style="background:#fbbf24;"></span>Bonsucesso Copa*</span>
+          <span><span class="legend-dot" style="background:#f0abfc;"></span>Dep. Freguesia</span>
+          <span><span class="legend-dot" style="background:#5eead4;"></span>Dep. Bonsucesso</span>
+        </div>
+        <div class="chart-wrap" style="height:220px;">
+          <canvas id="chartCPR" role="img" aria-label="CPR por campanha Meta">Copa Freq R$8,95, Copa Bon R$8,03, Dep Freq R$15,06, Dep Bon R$6,81.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Insight estratégico</div>
+      <div class="section-title">Diferença entre unidades</div>
+      <div class="insight-row">
+        <div class="insight-box ib-purple">
+          <div class="ib-title">Freguesia: Copa funcionou, depoimento não</div>
+          <div class="ib-body">Campanha Copa gerou 38 conversas a R$8,95. O depoimento gerou apenas 6 a R$15,06 — CPA 68% mais alto. Freguesia responde melhor a ganchos promocionais diretos.</div>
+        </div>
+        <div class="insight-box ib-teal">
+          <div class="ib-title">Bonsucesso: depoimento é forte (R$6,81)</div>
+          <div class="ib-body">O criativo de depoimento gerou o melhor CPA da conta (R$6,81). Hipótese: o público de Bonsucesso tem maior aderência emocional ao produto. Investir nesse formato para Bonsucesso.</div>
+        </div>
+        <div class="insight-box ib-amber">
+          <div class="ib-title">CTR geral abaixo do potencial</div>
+          <div class="ib-body">0,78% de CTR indica que os criativos geram entrega, mas ainda não capturam atenção suficiente nos primeiros segundos para maximizar intenção. Prioridade: evoluir abertura criativa.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div id="panel-pipeline" class="panel">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-eyebrow">🚨 Urgente</div>
+      <div class="section-title">Mensuração de leads do Meta</div>
+      <div class="alert alert-critical">
+        <div class="alert-icon">🚨</div>
+        <div>
+          <div class="alert-title">100 conversas chegaram. Quantas viraram matrícula? Não sabemos.</div>
+          <div class="alert-body">O Meta reporta microconversão (conversa iniciada). Sem registro dos contatos por campanha, é impossível saber qual criativo gera aluno real. A planilha abaixo resolve isso imediatamente — implementar esta semana.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Funil</div>
+      <div class="section-title">Do clique à matrícula</div>
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="pipe-num" style="color:#a78bfa;">136</div>
+          <div class="pipe-label">Conversas<br>iniciadas</div>
+          <div class="pipe-badge" style="background:rgba(167,139,250,0.12);color:#a78bfa;">Google + Meta</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num" style="color:#5eead4;">?</div>
+          <div class="pipe-label">Lead<br>qualificado</div>
+          <div class="pipe-badge" style="background:rgba(94,234,212,0.1);color:#5eead4;">a medir</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num" style="color:#86efac;">?</div>
+          <div class="pipe-label">Aula exp.<br>agendada</div>
+          <div class="pipe-badge" style="background:rgba(134,239,172,0.08);color:#86efac;">a medir</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num" style="color:#fbbf24;">?</div>
+          <div class="pipe-label">Compareceu<br>à aula</div>
+          <div class="pipe-badge" style="background:rgba(251,191,36,0.08);color:#fbbf24;">a medir</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num" style="color:#86efac;">?</div>
+          <div class="pipe-label">Matrícula<br>realizada</div>
+          <div class="pipe-badge" style="background:rgba(134,239,172,0.08);color:#86efac;">objetivo</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:var(--r);border:1px solid var(--border);">
+        Hoje apenas o primeiro estágio é visível. Os demais precisam ser registrados manualmente até a implementação de um CRM.
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Ferramenta · Esta semana</div>
+      <div class="section-title">Planilha de controle de leads</div>
+      <div class="card" style="padding:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Nome</th>
+              <th>Origem</th>
+              <th>Unidade</th>
+              <th>Status</th>
+              <th>Aula exp.</th>
+              <th>Matrícula</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10/06</td>
+              <td>Ana Costa</td>
+              <td><span class="card-tag tag-purple" style="margin:0;font-size:10px;">copa-freguesia</span></td>
+              <td>Freguesia</td>
+              <td><span class="card-tag tag-teal" style="margin:0;font-size:10px;">qualificado</span></td>
+              <td>agendada 12/06</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>09/06</td>
+              <td>Renata M.</td>
+              <td><span class="card-tag tag-purple" style="margin:0;font-size:10px;">google-smart</span></td>
+              <td>Freguesia</td>
+              <td><span class="card-tag tag-green" style="margin:0;font-size:10px;">matriculada</span></td>
+              <td>compareceu</td>
+              <td>✅ sim</td>
+            </tr>
+            <tr>
+              <td>08/06</td>
+              <td>Paula R.</td>
+              <td><span class="card-tag tag-teal" style="margin:0;font-size:10px;">depoimento-bon</span></td>
+              <td>Bonsucesso</td>
+              <td><span class="card-tag tag-amber" style="margin:0;font-size:10px;">sem resposta</span></td>
+              <td>—</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td style="color:var(--text3);">…</td>
+              <td style="color:var(--text3);">cada contato</td>
+              <td style="color:var(--text3);">via UTM</td>
+              <td style="color:var(--text3);">por unidade</td>
+              <td style="color:var(--text3);">atualizado</td>
+              <td style="color:var(--text3);">semanalmente</td>
+              <td style="color:var(--text3);"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:10px;">Coluna "Origem" deve ser preenchida conforme o UTM do link de WhatsApp. Com 30 dias de dados, será possível saber qual campanha gera matrícula real.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Rastreamento</div>
+      <div class="section-title">UTMs por campanha · copie e use</div>
+      <div class="utm-grid">
+        <div class="utm-card">
+          <div class="utm-label">Meta · Copa Freguesia</div>
+          <div class="utm-val">?utm_source=meta<br>&utm_campaign=copa-freguesia<br>&utm_medium=video</div>
+        </div>
+        <div class="utm-card">
+          <div class="utm-label">Meta · Copa Bonsucesso</div>
+          <div class="utm-val">?utm_source=meta<br>&utm_campaign=copa-bonsucesso<br>&utm_medium=video</div>
+        </div>
+        <div class="utm-card">
+          <div class="utm-label">Meta · Depoimento Bonsucesso</div>
+          <div class="utm-val">?utm_source=meta<br>&utm_campaign=depoimento-bon<br>&utm_medium=video</div>
+        </div>
+        <div class="utm-card">
+          <div class="utm-label">Google Smart · Freguesia</div>
+          <div class="utm-val">utm_source=google<br>&utm_campaign=smart-freguesia<br>&utm_medium=cpc</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-eyebrow">Métricas</div>
+      <div class="section-title">O que medir a partir de agora</div>
+      <div class="cards2">
+        <div class="card" style="border-left: 3px solid var(--red2);">
+          <div style="font-size:10px;background:rgba(252,165,165,0.1);color:var(--red);padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:12px;font-weight:500;">Parar de medir como sucesso</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet" style="background:var(--red);"></span>Conversa iniciada como métrica final</li>
+            <li><span class="rec-bullet" style="background:var(--red);"></span>CPL baseado apenas em microconversão do Meta</li>
+            <li><span class="rec-bullet" style="background:var(--red);"></span>Volume de cliques sem qualificação</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left: 3px solid var(--green2);">
+          <div style="font-size:10px;background:rgba(134,239,172,0.1);color:var(--green);padding:3px 9px;border-radius:20px;display:inline-block;margin-bottom:12px;font-weight:500;">Começar a medir</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Custo por lead qualificado (respondeu + interesse real)</li>
+            <li><span class="rec-bullet"></span>Custo por aula experimental agendada</li>
+            <li><span class="rec-bullet"></span>Taxa de comparecimento na aula experimental</li>
+            <li><span class="rec-bullet"></span>CAC real — custo por matrícula fechada por canal</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ESTRUTURA -->
+<div id="panel-estrutura" class="panel">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-eyebrow">Em andamento</div>
+      <div class="section-title">Separação da estrutura por unidade</div>
+      <div class="alert alert-purple">
+        <div class="alert-icon">🏗️</div>
+        <div>
+          <div class="alert-title">Objetivo: independência operacional total entre unidades</div>
+          <div class="alert-body">Criar contas separadas para Google Ads e Meta Ads por unidade permite gestão individual de orçamento, estratégia, mensuração e tomada de decisão — eliminando cruzamento de dados e viabilizando análise por unidade.</div>
+        </div>
+      </div>
+
+      <div class="struct-grid">
+        <div class="struct-card">
+          <div class="struct-card-header">
+            <div class="struct-icon si-purple">🏢</div>
+            <div>
+              <div class="struct-card-name">La Vie Danse | Bonsucesso</div>
+              <div class="struct-card-id">Google ID: 841-653-9311</div>
+            </div>
+          </div>
+          <div class="status-row">
+            <div class="status-badge sb-done"><div class="sb-dot"></div>Em operação</div>
+          </div>
+          <ul class="struct-items">
+            <li><span class="si-check">✓</span>Conta ativa e em veiculação</li>
+            <li><span class="si-warn">⚠</span>Atualizar cadastro PF → PJ (CNPJ)</li>
+            <li><span class="si-warn">⚠</span>Janela planejada para evitar impacto na veiculação</li>
+          </ul>
+        </div>
+
+        <div class="struct-card">
+          <div class="struct-card-header">
+            <div class="struct-icon si-teal">🏢</div>
+            <div>
+              <div class="struct-card-name">La Vie Danse | Freguesia</div>
+              <div class="struct-card-id">Google ID: 399-862-9307</div>
+            </div>
+          </div>
+          <div class="status-row">
+            <div class="status-badge sb-done"><div class="sb-dot"></div>Conta criada (PJ)</div>
+            <div class="status-badge sb-pending"><div class="sb-dot"></div>Estrutura pendente</div>
+          </div>
+          <ul class="struct-items">
+            <li><span class="si-check">✓</span>Cadastro com CNPJ</li>
+            <li><span class="si-check">✓</span>Método de pagamento (cartão corp.)</li>
+            <li><span class="si-x">✗</span>Campanhas e grupos de anúncios</li>
+            <li><span class="si-x">✗</span>Configuração de conversões</li>
+            <li><span class="si-x">✗</span>Públicos e mensuração</li>
+          </ul>
+        </div>
+
+        <div class="struct-card">
+          <div class="struct-card-header">
+            <div class="struct-icon si-purple">📱</div>
+            <div>
+              <div class="struct-card-name">Meta Ads | Bonsucesso</div>
+              <div class="struct-card-id">Conta de anúncio separada</div>
+            </div>
+          </div>
+          <div class="status-row">
+            <div class="status-badge sb-pending"><div class="sb-dot"></div>Reestruturação planejada</div>
+          </div>
+          <ul class="struct-items">
+            <li><span class="si-x">✗</span>Conta de anúncio independente</li>
+            <li><span class="si-x">✗</span>Segmentações dedicadas por região</li>
+            <li><span class="si-x">✗</span>Dashboard separado por unidade</li>
+          </ul>
+        </div>
+
+        <div class="struct-card">
+          <div class="struct-card-header">
+            <div class="struct-icon si-teal">📱</div>
+            <div>
+              <div class="struct-card-name">Meta Ads | Freguesia</div>
+              <div class="struct-card-id">Conta de anúncio separada</div>
+            </div>
+          </div>
+          <div class="status-row">
+            <div class="status-badge sb-pending"><div class="sb-dot"></div>Reestruturação planejada</div>
+          </div>
+          <ul class="struct-items">
+            <li><span class="si-x">✗</span>Conta de anúncio independente</li>
+            <li><span class="si-x">✗</span>Segmentações dedicadas por região</li>
+            <li><span class="si-x">✗</span>Dashboard separado por unidade</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">⚠️ Bloqueio crítico</div>
+      <div class="section-title">Landing pages por unidade</div>
+      <div class="alert alert-critical">
+        <div class="alert-icon">🚨</div>
+        <div>
+          <div class="alert-title">Subdomínios são pré-requisito para separação da estrutura</div>
+          <div class="alert-body">
+            <strong style="color:var(--red);">Elevar para prioridade máxima na fila de desenvolvimento:</strong><br><br>
+            • <code style="background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:11px;">freguesia.laviedanse.com.br</code><br>
+            • <code style="background:rgba(255,255,255,0.07);padding:2px 6px;border-radius:4px;font-size:11px;">bonsucesso.laviedanse.com.br</code><br><br>
+            Sem páginas dedicadas por unidade, haverá limitação em: mensuração correta dos resultados, otimização de campanhas, experiência do usuário, segmentação e análise de performance, escalabilidade futura.
+          </div>
+        </div>
+      </div>
+
+      <div class="cards2">
+        <div class="card">
+          <div class="card-tag tag-red" style="background:rgba(252,165,165,0.1);color:var(--red);">Sem landing pages dedicadas</div>
+          <ul class="rec-list" style="margin-top:8px;">
+            <li><span class="rec-bullet" style="background:var(--red);"></span>Mensuração cruzada entre unidades</li>
+            <li><span class="rec-bullet" style="background:var(--red);"></span>Impossível otimizar campanhas por unidade</li>
+            <li><span class="rec-bullet" style="background:var(--red);"></span>UX genérica — menor conversão</li>
+            <li><span class="rec-bullet" style="background:var(--red);"></span>Sem escalabilidade futura</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-tag tag-green">Com subdomínios ativos</div>
+          <ul class="rec-list" style="margin-top:8px;">
+            <li><span class="rec-bullet"></span>Mensuração independente por unidade</li>
+            <li><span class="rec-bullet"></span>Campanhas otimizadas por localidade</li>
+            <li><span class="rec-bullet"></span>UX com informações locais — maior conversão</li>
+            <li><span class="rec-bullet"></span>Escala real de investimento viabilizada</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Próximos passos</div>
+      <div class="section-title">Checklist de estrutura</div>
+      <div class="rec-grid">
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Google Ads · Freguesia</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Construir estrutura de campanhas</li>
+            <li><span class="rec-bullet"></span>Configurar grupos de anúncios por modalidade</li>
+            <li><span class="rec-bullet"></span>Implementar conversões e mensuração</li>
+            <li><span class="rec-bullet"></span>Configurar públicos de remarketing</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Google Ads · Bonsucesso</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Migrar cadastro PF → PJ sem impacto operacional</li>
+            <li><span class="rec-bullet"></span>Padronizar naming convention entre contas</li>
+            <li><span class="rec-bullet"></span>Implementar governança de relatórios por unidade</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Meta Ads · Separação de contas</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Criar conta de anúncio La Vie | Bonsucesso</li>
+            <li><span class="rec-bullet"></span>Criar conta de anúncio La Vie | Freguesia</li>
+            <li><span class="rec-bullet"></span>Migrar campanhas existentes para estrutura nova</li>
+            <li><span class="rec-bullet"></span>Configurar segmentações geográficas dedicadas</li>
+          </ul>
+        </div>
+        <div class="rec-card">
+          <div class="rec-priority pri-high">🔥 Alta prioridade</div>
+          <div class="rec-title">Subdomínios · Dev</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Elevar para prioridade máxima no dev</li>
+            <li><span class="rec-bullet"></span>freguesia.laviedanse.com.br</li>
+            <li><span class="rec-bullet"></span>bonsucesso.laviedanse.com.br</li>
+            <li><span class="rec-bullet"></span>Configurar rastreamento em cada subdomínio</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ESTRATÉGIA JULHO -->
+<div id="panel-estrategia" class="panel">
+  <div class="container">
+
+    <div class="section">
+      <div class="section-eyebrow">Planejamento</div>
+      <div class="section-title">Estratégia integrada · Julho 2026</div>
+
+      <div class="funnel3">
+        <div class="funnel-card fc-top">
+          <div class="funnel-label fl-top">Topo · Meta</div>
+          <ul class="funnel-items">
+            <li class="fi-top">Vídeos curtos de experiência de aula</li>
+            <li class="fi-top">Destaque para modalidades e metodologia</li>
+            <li class="fi-top">Alunos, professores, ambiente da academia</li>
+            <li class="fi-top">KPI: alcance, frequência, CPM, retenção</li>
+          </ul>
+        </div>
+        <div class="funnel-card fc-mid">
+          <div class="funnel-label fl-mid">Meio · Meta + Google</div>
+          <ul class="funnel-items">
+            <li class="fi-mid">Remarketing de visitantes do site</li>
+            <li class="fi-mid">Engajamento Instagram</li>
+            <li class="fi-mid">Visualizou 50%+ do vídeo</li>
+            <li class="fi-mid">Google Smart · escalar</li>
+          </ul>
+        </div>
+        <div class="funnel-card fc-bot">
+          <div class="funnel-label fl-bot">Fundo · WhatsApp + Matrícula</div>
+          <ul class="funnel-items">
+            <li class="fi-bot">Copa: Copa → desconto + WhatsApp direto</li>
+            <li class="fi-bot">Aula experimental gratuita</li>
+            <li class="fi-bot">Google captura intenção de busca</li>
+            <li class="fi-bot">Planilha de leads preenchida diariamente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Distribuição de orçamento</div>
+      <div class="section-title">Meta Ads · Alocação sugerida para julho</div>
+      <div class="chart-card">
+        <div class="chart-title">Distribuição recomendada do budget Meta</div>
+        <div class="chart-sub">70–80% campanhas promocionais WhatsApp · 20–30% awareness e testes</div>
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background:#a78bfa;"></span>Campanhas Copa/WhatsApp (75%)</span>
+          <span><span class="legend-dot" style="background:#5eead4;"></span>Awareness / Topo (15%)</span>
+          <span><span class="legend-dot" style="background:#fbbf24;"></span>Testes criativos (10%)</span>
+        </div>
+        <div class="chart-wrap" style="height:200px;">
+          <canvas id="chartBudget" role="img" aria-label="Distribuição de budget Meta: 75% WhatsApp, 15% awareness, 10% testes">Copa/WhatsApp 75%, Awareness 15%, Testes 10%.</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Testes criativos</div>
+      <div class="section-title">Testes recomendados para julho</div>
+      <div class="rec-grid">
+        <div class="rec-card" style="border-top: 2px solid #a78bfa;">
+          <div class="rec-priority pri-high">Teste 01 · Promoção primeiro</div>
+          <div class="rec-title">Hook promocional direto</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Abertura: "Brasil ganhou? Sua mensalidade pode ganhar desconto."</li>
+            <li><span class="rec-bullet"></span>CTA: "Chame no WhatsApp e garanta sua aula."</li>
+            <li><span class="rec-bullet"></span>Formato: vídeo curto 15s com texto em tela</li>
+            <li><span class="rec-bullet"></span>Aplicar para ambas as unidades</li>
+          </ul>
+        </div>
+        <div class="rec-card" style="border-top: 2px solid #5eead4;">
+          <div class="rec-priority pri-med">Teste 02 · Dança primeiro (Bonsucesso)</div>
+          <div class="rec-title">Desejo pelo produto como gancho</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Abertura: cenas de aula, energia da turma, professores, ambiente</li>
+            <li><span class="rec-bullet"></span>Mensagem: "Descubra por que tanta gente escolhe dançar na La Vie."</li>
+            <li><span class="rec-bullet"></span>Promoção entra como acelerador — não como gancho principal</li>
+            <li><span class="rec-bullet"></span>CTA: "Agende sua aula experimental."</li>
+          </ul>
+        </div>
+        <div class="rec-card" style="border-top: 2px solid #fbbf24;">
+          <div class="rec-priority pri-strat">Teste 03 · Academia primeiro</div>
+          <div class="rec-title">Estrutura e pertencimento</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Abertura: "Mais que uma aula. Um lugar para viver a dança."</li>
+            <li><span class="rec-bullet"></span>Foco em pertencimento, evolução, comunidade</li>
+            <li><span class="rec-bullet"></span>CTA: "Venha conhecer a unidade."</li>
+            <li><span class="rec-bullet"></span>Testar para adultos — yoga, pilates, cursos livres</li>
+          </ul>
+        </div>
+        <div class="rec-card" style="border-top: 2px solid #f0abfc;">
+          <div class="rec-priority pri-high">Execução criativa · Todos os testes</div>
+          <div class="rec-title">Direcionamento técnico</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Abertura forte nos primeiros 2–3 segundos</li>
+            <li><span class="rec-bullet"></span>Mais contraste visual logo no início</li>
+            <li><span class="rec-bullet"></span>CTAs mais fortes e diretos</li>
+            <li><span class="rec-bullet"></span>Mais pessoas em cena: professores, alunos, ambiente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <div class="section-eyebrow">Otimizações por unidade</div>
+      <div class="section-title">Recomendações específicas</div>
+      <div class="cards2">
+        <div class="card" style="border-left: 3px solid #a78bfa;">
+          <div class="card-tag tag-purple">Freguesia · julho</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px;">Manter Copa, evoluir criativo</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Copa como gancho principal — responde bem a promoção direta</li>
+            <li><span class="rec-bullet"></span>Escalar Copa +20% com monitoramento de CPR</li>
+            <li><span class="rec-bullet"></span>Testar novo criativo depoimento com mãe + filho (infantil)</li>
+            <li><span class="rec-bullet"></span>Google Smart: manter e escalar gradualmente</li>
+            <li><span class="rec-bullet"></span>Validar landing page do subdomínio antes de escalar</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left: 3px solid #5eead4;">
+          <div class="card-tag tag-teal">Bonsucesso · julho</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px;">Reexecutar Copa + apostar em depoimento</div>
+          <ul class="rec-list">
+            <li><span class="rec-bullet"></span>Reexecutar Copa com segmentação geográfica validada</li>
+            <li><span class="rec-bullet"></span>Expandir campanha de depoimento — melhor CPA da conta (R$6,81)</li>
+            <li><span class="rec-bullet"></span>Testar linguagem com mais protagonismo da dança (Teste 02)</li>
+            <li><span class="rec-bullet"></span>Investigar diferença de alcance vs Freguesia (frequência + CPM)</li>
+            <li><span class="rec-bullet"></span>Validar subdomínio antes de escalar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    Relatório de performance integrado · La Vie Danse · Unidades Freguesia &amp; Bonsucesso · Junho 2026 · Google Ads + Meta Ads
+  </div>
+</footer>
+
+<script>
+// TAB NAVIGATION
+function showTab(name) {
+  document.querySelectorAll('.nav-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  var map = { google: 0, meta: 1, pipeline: 2, estrutura: 3, estrategia: 4 };
+  document.querySelectorAll('.nav-tab')[map[name]].classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+// CHARTS
+var isDark = true;
+var tcol = 'rgba(240,236,250,0.4)';
+var gcol = 'rgba(255,255,255,0.07)';
+
+// CHART 1: Maio vs Junho comparison
+new Chart(document.getElementById('chartMvsJ'), {
+  type: 'bar',
+  data: {
+    labels: ['Cliques', 'Conversões ×10', 'Invest. ÷10'],
+    datasets: [
+      {
+        label: 'Maio',
+        data: [511, 370, 34.2],
+        backgroundColor: 'rgba(167,139,250,0.7)',
+        borderRadius: 4, borderSkipped: false
+      },
+      {
+        label: 'Junho',
+        data: [631, 360, 48.8],
+        backgroundColor: 'rgba(94,234,212,0.7)',
+        borderRadius: 4, borderSkipped: false
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { color: tcol, font: { size: 11 } }, grid: { color: gcol } },
+      x: { ticks: { color: tcol, font: { size: 11 }, autoSkip: false, maxRotation: 0 }, grid: { display: false } }
+    }
+  }
+});
+
+// CHART 2: CPR por campanha Meta
+new Chart(document.getElementById('chartCPR'), {
+  type: 'bar',
+  data: {
+    labels: ['Copa Freguesia', 'Copa Bonsucesso*', 'Dep. Freguesia', 'Dep. Bonsucesso'],
+    datasets: [{
+      data: [8.95, 8.03, 15.06, 6.81],
+      backgroundColor: ['#a78bfa', '#fbbf24', '#f0abfc', '#5eead4'],
+      borderRadius: 4, borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: true, max: 18,
+        ticks: { color: tcol, callback: function(v) { return 'R$' + v.toFixed(0); } },
+        grid: { color: gcol }
+      },
+      x: { ticks: { autoSkip: false, maxRotation: 0, color: tcol, font: { size: 10 } }, grid: { display: false } }
+    }
+  }
+});
+
+// CHART 3: Budget distribution
+new Chart(document.getElementById('chartBudget'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Copa / WhatsApp (75%)', 'Awareness / Topo (15%)', 'Testes criativos (10%)'],
+    datasets: [{
+      data: [75, 15, 10],
+      backgroundColor: ['#a78bfa', '#5eead4', '#fbbf24'],
+      borderWidth: 2,
+      borderColor: '#0e0818'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '62%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(c) { return ' ' + c.label + ': ' + c.parsed + '%'; }
+        }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
